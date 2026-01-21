@@ -1,0 +1,340 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h1,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-hi-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: {{ section.settings.grid_gap }};
+    display: grid;
+  }
+
+  #{{ section.id }} .c-hi-grid-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5em;
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+    padding: {{ section.settings.grid_left_padding }};
+  }
+
+  #{{ section.id }} .c-paragraph {
+    font-size: 1.25em;
+  }
+
+  #{{ section.id }} .c-hi-left-items {
+    display: grid;
+    grid-template-columns:{% for block in section.blocks %} 1fr{% endfor %};
+    gap: 0.5em;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-hi-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.75em;
+  }
+
+  #{{ section.id }} .c-hi-item img {
+    width: {{ section.settings.block_icon_size }}px;
+  }
+
+  #{{ section.id }} .c-hi-grid-right {
+    overflow: hidden;
+    display: flex;
+  }
+
+  #{{ section.id }} .c-hi-grid-right img {
+    width: 100%;
+    height: 100%;
+    max-height: 85vh;
+    object-fit: cover;
+    transition: 0.2s ease;
+  }
+
+  #{{ section.id }} .c-hi-grid-right:hover img {
+    transform: scale(1.1);
+  }
+
+  #{{ section.id }} .c-buttons-div {
+    margin-top: 0em;
+  }
+
+  #{{ section.id }} .c-button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #{{ section.id }} .c-hi-item-paragraph {
+    font-size: 0.875em;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint2 }}px) {
+    #{{ section.id }} .c-hi-grid {
+      grid-template-columns: 1fr;
+      gap: 0em;
+      display: grid;
+    }
+
+    #{{ section.id }} .c-hi-grid-left {
+      padding: {{ section.settings.grid_left_padding_mobile }};
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="{{ section.settings.section_container }}">
+    <div class="c-hi-grid">
+      <div class="c-hi-grid-left">
+        <div class="c-hi-review-div">
+          <div data-oke-star-rating data-oke-all-reviews="true"></div>
+        </div>
+        {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+        {%- if section.settings.section_top_heading != empty -%}<h1>{{ section.settings.section_top_heading }}</h1>{%- endif -%}
+        {%- if section.settings.section_top_paragraph != empty -%}<div class="c-paragraph c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+        {%- if section.settings.button_text != empty -%}
+          <div class="c-buttons-div">
+            <a class="c-button c-b1" href="{{ section.settings.button_url }}">{{ section.settings.button_text }}</a>
+          </div>
+        {%- endif -%}
+        <div class="c-hi-left-items">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Item' %}
+                <div class="c-hi-item" {{ block.shopify_attributes }}>
+                  {% if block.settings.block_image %}
+                    {{ block.settings.block_image | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto' }}
+                  {% endif %}
+                  <div class="c-hi-item-paragraph">{{ block.settings.block_paragraph }}</div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="c-hi-grid-right">
+        {% if section.settings.image %}
+          {{ section.settings.image | image_url: width: 1500 | image_tag: loading: 'eager', height: 'auto' }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Hero Icons",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 6,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet</p>"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "range",
+        "id": "block_icon_size",
+        "label": "Block Icon size",
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "default": 25,
+        "unit": "px"
+      },
+      {
+        "type": "text",
+        "id": "grid_gap",
+        "label": "Grid gap",
+        "default": "7.5vw"
+      },
+      {
+        "type": "text",
+        "id": "grid_left_padding",
+        "label": "Grid left padding",
+        "default": "0rem 0rem"
+      },
+      {
+        "type": "text",
+        "id": "grid_left_padding_mobile",
+        "label": "Grid left padding mobile",
+        "default": "0rem 0rem"
+      },
+      {
+        "type": "select",
+        "id": "section_container",
+        "label": "Section container",
+        "default": "page-width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "Normal"
+          },
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "page-width2",
+            "label": "Smaller"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Buy Now"
+      },
+      {
+        "type": "url",
+        "id": "button_url",
+        "label": "Button Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "flex-start",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Hero Icons"
+      }
+    ]
+  }
+{% endschema %}

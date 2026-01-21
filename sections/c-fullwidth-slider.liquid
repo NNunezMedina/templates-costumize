@@ -1,0 +1,172 @@
+{% style %}
+  .c-fw-testimonial {
+     font-size: 16px;
+     padding-top: {{ section.settings.padding_top }}em;
+     padding-bottom: {{ section.settings.padding_bottom }}em;
+     background-color: {{ section.settings.bg_color }};
+     {% if section.settings.image %}
+         background: url("{{ section.settings.image | image_url }}") no-repeat center;
+         background-size: cover;
+         box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, {{ section.settings.overlay }});
+     {% endif %}
+   };
+   .c-fw-testimonial .testimonial-paragraph {
+     font-size: 1.125em;
+   }
+   .c-fw-testimonial .customer-info {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-direction: column;
+   }
+     .c-fw-testimonial .testimonial-image {
+         width: 56px;
+         height: 56px;
+         border-radius: 100%;
+         overflow: hidden;
+         margin-bottom: 1em;
+     }
+     .c-fw-testimonial .testimonial-name {
+         font-weight: bold;
+     }
+     .testimonial-content {
+     padding: 3em;
+     text-align: center;
+     color: white;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 16px;
+     width: 80%
+     margin: 0 auto;
+   }
+   .swiper-button-next, .swiper-button-prev {
+     color: white;
+   }
+   .swiper-button-next:disabled, .swiper-button-prev:disabled {
+      color: #ffffffaa;
+   }
+   .swiper-pagination-bullet {
+     background: transparent;
+     border: 1px solid white;
+   }
+    .swiper-pagination-bullet-active {
+      background: white;
+    }
+{% endstyle %}
+
+<section id="{{ section.id }}" class="c-fw-testimonial">
+  <div class="swiper mySwiper page-width">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide" {{ block.shopify_attributes }}>
+          <div class="testimonial-content">
+            <p class="testimonial-paragraph">{{ block.settings.paragraph }}</p>
+            <div class="customer-info">
+              <div class="testimonial-image">
+                {{ block.settings.image | image_url: width: 56, height: 56 | image_tag }}
+              </div>
+              <p class="testimonial-name">{{ block.settings.name }}</p>
+              <p class="testimonial=position">{{ block.settings.position }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+</section>
+<script>
+  var swiper = new Swiper('.mySwiper', {
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    grabCursor: true,
+    loop: true,
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Testimonial FW Slider",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "overlay",
+      "label": "Overlay",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.5
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "type": "Item",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph",
+          "label": "Testimonial",
+          "default": "<p>Lorem ipsum dolor sit amet</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Name"
+        },
+        {
+          "type": "text",
+          "id": "position",
+          "label": "Position",
+          "default": "Position"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Testimonials",
+      "name": "C FW Testimonial Slider"
+    }
+  ]
+}
+{% endschema %}

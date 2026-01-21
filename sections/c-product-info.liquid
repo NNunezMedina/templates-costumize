@@ -1,0 +1,1767 @@
+<link rel="stylesheet" href="{{ 'swiper-bundle.min.css' | asset_url }}"/>
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
+
+
+
+<script type="lazyload_int" data-src="{{ 'product-info.js' | asset_url }}"></script>
+<script type="lazyload_int" data-src="{{ 'product-form.js' | asset_url }}"></script>
+
+
+{% if section.settings.product != null %}
+  {% assign myProd = section.settings.product %}
+{% else %}
+  {% assign myProd = product %}
+{% endif %}
+
+{% assign pSofav = myProd.selected_or_first_available_variant %}
+
+
+{% assign appBlocks = section.blocks | where: 'type', '@app' %}
+{% assign productBadge = section.blocks | where: 'type', 'Badge' %}
+{% assign partnershipLogos = section.blocks | where: 'type', 'PartnershipLogos' %}
+{% assign publicationLogos = section.blocks | where: 'type', 'PublicationLogos' %}
+{% assign ProductCheck = section.blocks | where: 'type', 'ProductCheck' %}
+
+
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h1,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+
+
+
+   /* modal */
+  /*#region*/
+    #{{ section.id }} .c-pi-modal {
+      background-color: rgba(0, 0, 0, 0.8);
+      position: fixed;
+      top: 0em;
+      left: 0em;
+      width: 100%;
+      height: 100%;
+      /* z-index: 4; */
+      z-index: var(--zindex-1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #{{ section.id }} .c-pi-modal[open="false"] {
+      display: none;
+    }
+
+    #{{ section.id }} .c-mt-10 {
+      margin-top: 10px;
+    }
+
+
+    #{{ section.id }} .c-pi-modal[open="true"] {
+      display: flex;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider {
+      width: 80%;
+      height: 100%;
+      background-color: rgba(0,0,0,1);
+      border: 1px solid #fff;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider .swiper-slide img {
+      max-height: 100%;
+      height: 100%;
+      width: auto;
+      cursor: zoom-in;/**/
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider .swiper-arrow {
+      background-color: rgba(255, 255, 255, 1);
+      color: #000;
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      width: 3em;
+      height: 3em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+      aspect-ratio: 1/1;
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider .swiper-arrow:hover {
+      border-color: rgba(0, 0, 0, 1);
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider .swiper-arrow::after {
+      font-size: 1em;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-zoom {
+      position: absolute;
+      top: 1em;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5em;
+      cursor: pointer;
+      background-color: #000;
+      color: #fff;
+      padding: 0.4em 0.75em;
+      border-radius: 999px;
+      font-size: 0.8em;
+      line-height: normal;
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-zoom p {
+      color: #fff;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-zoom:hover {
+      opacity: 1 !important;
+    }
+
+    #{{ section.id }} .c-pi-modal-close {
+      position: absolute;
+      top: 7em;
+      right: 3em;
+      cursor: pointer;
+      z-index: 2;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1em;
+      border-radius: 100%;
+    }
+
+    #{{ section.id }} .c-pi-modal-close svg {
+      width: 2em;
+      color: #fff;
+    }
+  /*#endregion*/
+
+  #{{ section.id }} .c-pi-wrapper {
+    display: flex;
+    gap: 3em;
+  }
+
+  /* left */
+  /*#region*/
+    #{{ section.id }} .c-pi-grid-left-wrapper {
+      width: calc(50% - 1.5em);
+    }
+
+    #{{ section.id }} .c-pi-grid-left {
+      position: sticky;
+      top: 6em;
+      /*display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+      "a a"
+      "b c"
+      "d d"
+      "e f"
+      "g g"
+      "h i"
+      "j j";
+      gap: 1em;*/
+    }
+
+    /*#{{ section.id }} .c-pi-media-div:nth-child(1) {
+      grid-area: a;
+    }
+
+    #{{ section.id }} .c-pi-media-div:nth-child(4) {
+      grid-area: d;
+    }
+
+    #{{ section.id }} .c-pi-media-div:nth-child(7) {
+      grid-area: g;
+    }
+
+    #{{ section.id }} .c-pi-media-div:last-child {
+      grid-area: j;
+    }*/
+
+    #{{ section.id }} .c-pi-main-slider {
+      width: 100%;
+      margin-bottom: 1em;
+    }
+
+    #{{ section.id }} .c-pi-fullscreen {
+      position: absolute;
+      top: 0.5em;
+      right: 0.5em;
+      z-index: 2;
+      cursor: pointer;
+      display: flex;
+      background-color: rgba(255,255,255,0.5);
+      border-radius: 1em;
+      transition: 0.2s ease;
+      padding: 0.25em;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1/1;
+    }
+
+    #{{ section.id }} .c-pi-fullscreen:hover {
+      background-color: rgba(255,255,255,1);
+    }
+
+    #{{ section.id }} .c-pi-fullscreen svg {
+      width: 1.5em;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-wrapper {
+      align-items: center;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-slide img {
+      border-radius: 0em;
+      object-fit: unset;
+      width: 100%;
+      cursor: zoom-in;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      width: 2.5em;
+      height: 2.5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      aspect-ratio: 1/1;
+      transition: 0.2s ease;
+      opacity: 1;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow:hover {
+      background-color: rgba(0, 0, 0, 1);
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow::after {
+      font-size: 0.8em;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow.swiper-button-prev {
+      left: 8px;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow.swiper-button-next {
+      right: 8px;
+    }
+
+    #{{ section.id }} .swiper-horizontal>.swiper-pagination-bullets,
+    #{{ section.id }} .swiper-pagination-bullets.swiper-pagination-horizontal {
+      bottom: 0px;
+    }
+
+    #{{ section.id }} .swiper-pagination-bullet {
+      width: 20px;
+      height: 5px;
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 0em;
+      opacity: 1;
+    }
+
+    #{{ section.id }} .swiper-pagination-bullet.swiper-pagination-bullet-active {
+      background: var(--brand-primary);
+      border-color: rgba(0, 0, 0, 1);
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider {
+      width: 100%;
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider .swiper-wrapper {
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider .swiper-slide {
+      border: 2px solid #ddd;/* */
+      cursor: pointer;
+      border-radius: 0em;
+      opacity: 0.8;
+      height: auto !important;
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider .swiper-slide img {
+      border-radius: 0em;
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider .swiper-slide:hover {
+      opacity: 1;
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider .swiper-slide.swiper-slide-thumb-active {
+      border-color: var(--brand-primary);
+      opacity: 1;
+    }
+
+    #{{ section.id }} .c-pi-media-div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #{{ section.id }} .c-pi-image {
+      max-width: 100%;
+      object-fit: cover;
+      width: 100%;
+    }
+  /*#endregion*/
+
+  #{{ section.id }} .c-pi-grid-right {
+    width: calc(50% - 1.5em);
+  }
+
+  #{{ section.id }} .c-pi-form-inner {
+    position: sticky;
+    top: 6em;
+    /*position: sticky;
+    top: 7em;
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;*/
+  }
+
+  /* heading price */
+  /*#region*/
+    #{{ section.id }} #tp-widget-wrapper {
+      display: flex;
+    }
+
+    #{{ section.id }} .c-pi-heading-price {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0em;
+    }
+
+    #{{ section.id }} .c-pi-heading {
+      margin: 0em 0em;
+      font-size: 2em;
+      line-height: 140%;
+      font-weight: 600;
+    }
+
+    #{{ section.id }} .c-pi-subheading {
+      font-weight: 300;
+    }
+
+    #{{ section.id }} .c-pi-price-div {
+      margin: 0.5em 0em 0em 0em;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.75em;
+      font-weight: 400;
+      font-size: 1.3em;
+      line-height: normal;
+    }
+
+    #{{ section.id }} .c-pi-price-div .c-pi-normal-price {
+      font-weight: 600;
+    }
+
+    #{{ section.id }} .c-pi-compare-price {
+      text-decoration: line-through;
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    #{{ section.id }} .c-pi-price-hide {
+      display: none;
+    }
+  /*#endregion*/
+
+
+  /* below heading */
+  /*#region*/
+    #{{ section.id }} .c-pi-review-div {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1em;
+      margin: 0em 0em 1em 0em;
+      /*margin-left: -38px;*/
+    }
+
+    #{{ section.id }} .c-pi-stars-div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.2em;
+    }
+
+    #{{ section.id }} .c-pi-stars-div svg {
+      color: var(--brand-primary);
+    }
+  /*#endregion*/
+
+
+  /* variants */
+  /*#region*/
+    #{{ section.id }} .c-pi-variants-div {
+      margin: 1em 0em 0em 0em;
+    }
+
+    #{{ section.id }} .c-pi-fieldset {
+      border: none;
+      padding: 0em;
+    }
+
+    #{{ section.id }} .c-pi-fieldset > legend {
+      display: none;
+    }
+
+    #{{ section.id }} .c-pi-name-div {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 0.75em;
+    }
+
+    #{{ section.id }} .c-pi-fielset-name span {
+      font-weight: 400;
+      font-size: 1em;
+    }
+
+    #{{ section.id }} .c-pi-labels-div {
+      display: block;
+    }
+
+    #{{ section.id }} .c-pi-label {
+      display: inline-block;
+      border: none;
+      padding: 0.75em 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      background-color: #eee;
+      font-weight: 700;
+      margin: 0em 0.5em 0.5em 0em;
+      font-size: 0.75em;
+    }
+
+    #{{ section.id }} .c-pi-label > input {
+      display: none;
+    }
+
+    #{{ section.id }} .c-pi-active-label {
+      background-color: var(--brand-primary);
+      color: #fff;
+    }
+  /*#endregion*/
+
+
+  /* qty */
+  /*#region*/
+    #{{ section.id }} .c-pi-qty-div {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    #{{ section.id }} .c-pi-qty-div .quantity:after {
+      box-shadow: none;
+    }
+
+    #{{ section.id }} .c-pi-qty {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.25em;
+      /* border: 1px solid #000; */
+      /* background-color: #fff; */
+      height: 100%;
+      border-radius: 1em;
+      /* width: 100%; */
+    }
+
+    #{{ section.id }} .c-pi-qty-number {
+      border: 1px solid #eee;
+      border-radius: 0.25em;
+    }
+
+    #{{ section.id }} .c-pi-qty > * {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #{{ section.id }} .c-pi-qty-button {
+      border: none;
+      cursor: pointer;
+      padding: 0.75em;
+      transition: 0.2s ease;
+      background-color: #eee;
+      border-radius: 0.25em;
+    }
+
+    #{{ section.id }} .c-pi-qty-button.minimum {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* #{{ section.id }} .c-pi-qty-button.c-pi-qty-minus {
+      padding: 0.5em 0.5em 0.5em 1em;
+    } */
+
+    #{{ section.id }} .c-pi-qty-button svg {
+      width: 0.9em;
+    }
+
+    #{{ section.id }} .c-pi-qty-button svg path {
+      stroke: ;
+    }
+
+    #{{ section.id }} .c-pi-qty > input {
+      display: none;
+    }
+  /*#endregion*/
+
+
+  #{{ section.id }} .c-pi-shop-pay {
+    margin-bottom: 0.75em;
+    font-size: 0.875em;
+  }
+
+  /* atc */
+  /*#region*/
+    #{{ section.id }} .c-pi-atc-div {
+      display: flex;
+      margin: 0em 0em 1em 0em;
+      gap: 0.5em;
+      flex-direction: column;
+      align-items: center;
+      text-align: center; 
+    }
+
+    #{{ section.id }} .c-pi-atc {
+      width: 100%;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.25em;
+      text-transform: uppercase;
+    }
+
+    #{{ section.id }} .c-pi-atc-div > div,
+    #{{ section.id }} product-form {
+      width: 100%;
+    }
+
+    #{{ section.id }} product-form .button:after {
+      box-shadow: none;
+    }
+
+    #{{ section.id }} .shopify-payment-button__more-options {
+      color: #000
+    }
+  /*#endregion*/
+
+
+  /* badges */
+  /*#region*/
+    #{{ section.id }} .c-pi-badge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 1em;
+      row-gap: 1em;
+      padding: 0em 0em;
+      margin-top: 2em;
+    }
+
+    #{{ section.id }} .c-pi-badge-grid:not(:has(div)) {
+      display: none;
+    }
+
+    #{{ section.id }} .c-pi-badge {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.625em;
+      padding: 0em 0em;
+    }
+
+    #{{ section.id }} .c-pi-badge svg {
+      color: var(--brand-primary);
+      min-width: 1.5em;
+      width: 1.5em;
+    }
+
+    #{{ section.id }} .c-pi-badge-text {
+      font-size: 0.75em;
+      line-height: 16px;
+    }
+  /*#endregion*/
+
+  #{{ section.id }} .c-pi-product-checks {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  #{{ section.id }} .c-pi-product-check {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+
+  #{{ section.id }} .c-pi-product-check svg {
+    width: 1em;
+    min-width: 1em;
+    margin-top: 2px;
+    color: var(--brand-primary);
+  }
+
+  #{{ section.id }} .c-pi-product-check p {
+    color: rgba(18, 18, 18, 0.9) !important;
+    font-size: 15px;
+  }
+
+  /* tabs */
+  /*#region*/
+    #{{ section.id }} .c-pi-tabs {
+      margin-top: 2em;
+    }
+
+    #{{ section.id }} .c-pi-tabs .c-pi-tab-details:first-child {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    #{{ section.id }} .c-pi-tab-summary {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em 0em;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      font-weight: 400;
+      gap: 0.5em;
+    }
+
+    #{{ section.id }} .c-pi-tab-summary svg {
+      width: 1em;
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-pi-tab-content {
+      padding-bottom: 1em;
+      padding-top: 1em;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    #{{ section.id }} .c-pi-tab-content video {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    #{{ section.id }} .c-pi-tab-content iframe {
+      max-width: 100%;
+    }
+
+    #{{ section.id }} .c-pi-tab-details[open] svg {
+      transform: rotate(45deg);
+    }
+
+    #{{ section.id }} .c-pi-tab-details[open] .c-pi-tab-summary {
+      border-bottom: none;
+    }
+  /*#endregion*/
+
+  /* logos */
+  /*#region*/
+    #{{ section.id }} .c-pi-logos-wrap {
+      display: flex;
+      flex-direction: column;
+      margin: 1em 0em;
+    }
+
+    #{{ section.id }} .c-pi-logos-wrap p {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    #{{ section.id }} .c-pi-logos {
+      display: flex;
+      gap: 1em;
+      width: 100%;
+    }
+
+    #{{ section.id }} .c-pi-logos.c-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 1.75em;
+    }
+
+    #{{ section.id }} .c-pi-logo-div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #{{ section.id }} .c-pi-logos img {
+      height: 2.5em;
+      object-fit: contain;
+      filter: brightness(0);
+    }
+  /*#endregion*/
+
+  #{{ section.id }} .c-pi-extra-text {
+    font-size: 15px;
+    padding: 0.5em 0em;
+  }
+
+  #{{ section.id }} .c-pi-extra-text p {
+    color: rgba(18, 18, 18, 0.9) !important;
+  }
+
+  #{{ section.id }} .c-pi-more-faqs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+  }
+
+  /* #{{ section.id }} .c-pi-reviews {
+    display: none;
+  } */
+
+  /* #{{ section.id }} .c-pi-reviews-link {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+  } */
+
+  #{{ section.id }} .c-pi-sale-qty {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint2 }}px) {
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider {
+      width: 100%;
+      border-color: transparent;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider .swiper-arrow {
+      top: 60%;
+    }
+
+    #{{ section.id }} .c-pi-modal-close {
+      top: 1em;
+      right: 1em;
+    }
+
+    #{{ section.id }} .c-pi-modal-close svg {
+      width: 1.5em;
+    }
+
+    #{{ section.id }} .page-width:not(.c-no-purchase),
+    #{{ section.id }} .page-width2 {
+      padding: 0 1em;
+    }
+
+    #{{ section.id }} .c-pi-wrapper {
+      gap: 1em;
+    }
+
+    #{{ section.id }} .c-pi-grid-left-wrapper,
+    #{{ section.id }} .c-pi-grid-right {
+      width: calc(50% - 0.5em);
+    }
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} {
+      padding-top: 0em;
+      padding-bottom: 2em;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-slider .swiper-slide img {
+      object-fit: contain;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-zoom {
+      top: 1em;
+      left: 1em;
+      transform: unset;
+      padding: 1em;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-zoom svg {
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    #{{ section.id }} .c-pi-modal .c-pi-modal-zoom p {
+      display: none;
+    }
+
+
+
+    #{{ section.id }} .page-width:not(.c-no-purchase),
+    #{{ section.id }} .page-width2 {
+      padding: 0em;
+    }
+
+    #{{ section.id }} .c-pi-wrapper {
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    #{{ section.id }} .c-pi-grid-left {
+    }
+
+    #{{ section.id }} .c-pi-image {
+      border-radius: 0.5em;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-slide img {
+      border-radius: 0em;
+      border: none;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow {
+      width: 2em;
+      height: 2em;
+    }
+
+    #{{ section.id }} .c-pi-main-slider .swiper-arrow::after {
+      font-size: 0.6em;
+    }
+
+    #{{ section.id }} .c-pi-thumbs-slider {
+      padding: 0 1em;
+    }
+
+    #{{ section.id }} .c-pi-wrapper > * {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    #{{ section.id }} .c-pi-grid-right {
+      padding: 0 1em;
+    }
+
+    #{{ section.id }} .c-pi-review-div {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5em;
+    }
+
+    #{{ section.id }} .c-pi-heading {
+      font-size: 1.5em;
+    }
+
+    #{{ section.id }} .c-pi-subheading {
+      font-size: 0.9em;
+    }
+
+    #{{ section.id }} .c-pi-price-div {
+      font-size: 1.1em;
+    }
+
+    #{{ section.id }} .c-pi-badge-grid {
+      column-gap: 1em;
+      row-gap: 1em;
+    }
+
+    #{{ section.id }} .c-pi-badge svg {
+      color: var(--brand-primary);
+      min-width: 1em;
+      width: 1em;
+    }
+
+    #{{ section.id }} .c-pi-atc-div {
+      gap: 0.5em;
+    }
+
+    /* #{{ section.id }} .c-pi-qty-div {
+      min-width: 35%;
+    }
+
+    #{{ section.id }} .c-pi-qty-button {
+      padding: 0.25em 0.75em 0.25em 0.25em;
+    }
+
+    #{{ section.id }} .c-pi-qty-button.c-pi-qty-minus {
+      padding: 0.25em 0.25em 0.25em 0.75em;
+    } */
+
+    #{{ section.id }} .c-pi-logos.c-grid {
+      gap: 1em;
+    }
+
+    #{{ section.id }} .c-pi-extra-text.c-text2 {
+      display: none;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="c-pi-modal" open="false">
+    <div class="c-pi-modal-close">{% render 'icon-close' %}</div>
+    <div class="swiper c-pi-modal-slider">
+      <div class="c-pi-modal-zoom">
+        {% render 'icon-zoom' %}
+        <p>Zoom <span>(Double-click)</span></p>
+      </div>
+      <div class="swiper-wrapper">
+        {% if section.settings.use_new_images == true %}
+          {% assign metaobject_product_media_handle = myProd.handle | handleize %}
+
+          {% paginate shop.metaobjects.pdp_media.values by 10000 %}
+            {% for item in shop.metaobjects.pdp_media.values %}
+              {% if item.name_handle == metaobject_product_media_handle %}
+                {% for media in item.content.value %}
+                  <div class="c-pi-media-div swiper-slide">
+                    <div class="swiper-zoom-container">
+                      {% if media.media_type == 'video' %}
+                        {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-pi-image' }}
+                      {% elsif media.media_type == 'image' %}
+                        {{ media | image_url: width: 1000 | image_tag: loading: 'eager', height: 'auto', class: 'c-pi-image' | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="' | replace: ' srcset="' , ' data-srcset="' }}
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endpaginate %}
+        {% else %}
+          {% for media in myProd.media %}
+            <div class="c-pi-media-div swiper-slide">
+              <div class="swiper-zoom-container">
+                {% if media.media_type == 'video' %}
+                  {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-pi-image' }}
+                {% elsif media.media_type == 'image' %}
+                  {{ media | image_url: width: 1000 | image_tag: loading: 'eager', height: 'auto', class: 'c-pi-image' | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="' | replace: ' srcset="' , ' data-srcset="' }}
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="swiper-button-prev swiper-arrow"></div>
+      <div class="swiper-button-next swiper-arrow"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+  <div class="{{ section.settings.section_container }}" id="section-buy-now">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-pi-wrapper">
+      <div class="c-pi-grid-left-wrapper">
+        <div class="c-pi-grid-left">
+          <div class="swiper c-pi-main-slider">
+            <div class="c-pi-fullscreen">{% render 'icon-zoom' %}</div>
+            <div class="swiper-wrapper">
+              {% if section.settings.use_new_images == true %}
+                {% assign metaobject_product_media_handle = myProd.handle | handleize %}
+
+                {% paginate shop.metaobjects.pdp_media.values by 10000 %}
+                  {% for item in shop.metaobjects.pdp_media.values %}
+                    {% if item.name_handle == metaobject_product_media_handle %}
+                      {% for media in item.content.value %}
+                        <div class="c-pi-media-div swiper-slide">
+                          {% if media.media_type == 'video' %}
+                            {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-pi-image' }}
+                          {% elsif media.media_type == 'image' %}
+                            {{ media | image_url: width: 1000 | image_tag: loading: 'eager', height: 'auto', class: 'c-pi-image' | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="' | replace: ' srcset="' , ' data-srcset="' }}
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                {% endpaginate %}
+              {% else %}
+                {% for media in myProd.media %}
+                  <div class="c-pi-media-div swiper-slide">
+                    {% if media.media_type == 'video' %}
+                      {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-pi-image' }}
+                    {% elsif media.media_type == 'image' %}
+                      {{ media | image_url: width: 1000 | image_tag: loading: 'eager', height: 'auto', class: 'c-pi-image' | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="' | replace: ' srcset="' , ' data-srcset="' }}
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="swiper-button-prev swiper-arrow"></div>
+            <div class="swiper-button-next swiper-arrow"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+          <div thumbsSlider="" class="swiper c-pi-thumbs-slider">
+            <div class="swiper-wrapper">
+              {% if section.settings.use_new_images == true %}
+                {% assign metaobject_product_media_handle = myProd.handle | handleize %}
+
+                {% paginate shop.metaobjects.pdp_media.values by 10000 %}
+                  {% for item in shop.metaobjects.pdp_media.values %}
+                    {% if item.name_handle == metaobject_product_media_handle %}
+                      {% for media in item.content.value %}
+                        <div class="c-pi-media-div swiper-slide">
+                          {% if media.media_type == 'video' %}
+                            {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-pi-image' }}
+                          {% elsif media.media_type == 'image' %}
+                            {{ media | image_url: width: 400 | image_tag: loading: 'eager', height: 'auto', class: 'c-pi-image' | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="' | replace: ' srcset="' , ' data-srcset="' }}
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                {% endpaginate %}
+              {% else %}
+                {% for media in myProd.media %}
+                  <div class="c-pi-media-div swiper-slide">
+                    {% if media.media_type == 'video' %}
+                      {{ media | video_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-pi-image' }}
+                    {% elsif media.media_type == 'image' %}
+                      {{ media | image_url: width: 400 | image_tag: loading: 'eager', height: 'auto', class: 'c-pi-image' | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-class="LazyLoad" data-src="' | replace: ' srcset="' , ' data-srcset="' }}
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <product-info
+        id="ProductInfo-{{ section.id }}"
+        data-section="{{ section.id }}"
+        data-url="{{ myProd.url }}"
+        class="c-pi-grid-right"
+      >
+        {%- assign product_form_id = 'product-form-' | append: section.id -%}
+        <div class="c-pi-form-inner">
+          <div class="c-pi-review-div">
+            {% if appBlocks != blank %}
+              {% for block in appBlocks %}
+                {% if forloop.first == true %}
+                  {% render block %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="c-pi-heading-price">
+            <h2 class="c-pi-heading">
+              {% if section.settings.custom_product_name != empty %}
+                {{ section.settings.custom_product_name }}
+              {% else %}
+                {{ myProd.title }}
+              {% endif %}
+            </h2>
+          </div>
+          <div class="c-pi-price-div">
+            {% if pSofav.compare_at_price %}
+              <p class="c-pi-compare-price"
+                class="{% if pSofav.compare_at_price < pSofav.price %}c-pi-price-hide{% endif %}"
+              >{{ pSofav.compare_at_price | money }}</p>
+            {% endif %}
+            <p class="c-pi-normal-price">{{ pSofav.price | money_without_trailing_zeros }}</p>
+          </div>
+          {% if pSofav.price >= 5000 %}
+            <div class="c-pi-shop-pay">
+              {{ form | payment_terms }}
+            </div>
+          {% endif %}
+          <div class="c-pi-variants-div">
+            <input class="c-pi-master-input" type="hidden" name="id" value="{{ pSofav.id }}" data-checkout="false">
+
+            <div class="c-pi-option">
+              {% for option in myProd.options_with_values %}
+                {% if option.name != "Title" %}
+                  <fieldset class="c-pi-fieldset">
+                    <legend>{{ option }}</legend>
+                    <div class="c-pi-name-div">
+                      <h4 class="c-pi-fielset-name">{{ option.name }}</h4>
+                    </div>
+                    <div class="c-pi-labels-div">
+                      {% for value in option.values %}
+                        {% if value != 'Default Title' %}
+                          <label for="c-pi-{{ option.name | handleize }}-{{ value | handleize }}" class="c-pi-label {% if option.selected_value == value %}c-pi-active-label{% endif %}">
+                            <input
+                              {% if option.selected_value == value %}checked{% endif %}
+                              type="radio"
+                              name="{{ option.name }}"
+                              value="{{ value }}"
+                              id="c-pi-{{ option.name | handleize }}-{{ value | handleize }}" required>
+                            <span>{{ value }}</span>
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </fieldset>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          <div class="c-pi-error"></div>
+          <div class="c-pi-atc-div">
+            <div class="c-pi-qty-div product-form__quantity" id="Quantity-Form-{{ section.id }}">
+              {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
+                {% # theme-check-disable %}
+                {%- assign cart_qty = cart
+                | item_count_for_variant: myProd.selected_or_first_available_variant.id
+              -%}
+              {% # theme-check-enable %}
+              <label class="quantity__label form__label" for="Quantity-{{ section.id }}">
+                {{ 'products.product.quantity.label' | t }}
+                <span class="quantity__rules-cart{% if cart_qty == 0 %} hidden{% endif %}">
+                  {%- render 'loading-spinner' -%}
+                  <span
+                    >(
+                    {{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}}
+                    )</span
+                  >
+                </span>
+              </label>
+
+              <quantity-input class="quantity" data-url="{{ myProd.url }}" data-section="{{ section.id }}">
+                <button class="quantity__button c-pi-qty-button c-pi-qty-minus" name="minus" type="button">
+                  {% render 'icon-minus' %}
+                </button>
+                <input
+                  class="quantity__input c-pi-qty-input c-pi-qty-number"
+                  type="number"
+                  name="quantity"
+                  id="Quantity-{{ section.id }}"
+                  data-cart-quantity="{{ cart_qty }}"
+                  data-min="{{ myProd.selected_or_first_available_variant.quantity_rule.min }}"
+                  min="{{ myProd.selected_or_first_available_variant.quantity_rule.min }}"
+                  {% if myProd.selected_or_first_available_variant.quantity_rule.max != null %}
+                    data-max="{{ myProd.selected_or_first_available_variant.quantity_rule.max }}"
+                    max="{{ myProd.selected_or_first_available_variant.quantity_rule.max }}"
+                  {% endif %}
+                  step="{{ myProd.selected_or_first_available_variant.quantity_rule.increment }}"
+                  value="{{ myProd.selected_or_first_available_variant.quantity_rule.min }}"
+                  form="{{ product_form_id }}"
+                >
+                <button class="quantity__button c-pi-qty-button c-pi-qty-plus" name="plus" type="button">
+                  {% render 'icon-plus' %}
+                </button>
+              </quantity-input>
+            </div>
+            {%- render 'buy-buttons',
+              product: myProd,
+              product_form_id: product_form_id,
+              section_id: section.id,
+              show_pickup_availability: true,
+              custom_classes: "c-pi-atc c-button c-b2"
+            -%}
+            {% comment %} <button class="c-pi-atc c-button c-b2" type="submit"
+              {% if pSofav.available == false %}disabled style="pointer-events: none; opacity: 0.2;"{% endif %}
+            >
+              <span>Add To Cart</span>
+            </button> {% endcomment %}
+            {% if section.settings.c_product_below_atc_text != empty %}
+              <div class="c-pi-atc-guarantee">{{ section.settings.c_product_below_atc_text }}</div>
+            {% endif %}
+            {% if section.settings.show_payment_badges == true %}
+              <div>
+                {%- for type in shop.enabled_payment_types -%}
+                  <span>{{ type | payment_type_svg_tag }}</span>
+                {%- endfor -%}
+              </div>
+            {% endif %}
+          </div>
+          {% if section.settings.show_dynamic_pay_button == true %}
+            {{ form | payment_button }}
+          {% endif %}
+          {% if section.settings.extra_paragraph1 != empty %}
+            <div class="c-pi-extra-text">{{ section.settings.extra_paragraph1 }}</div>
+          {% endif %}
+          {% if productBadge != blank %}
+            <div class="c-pi-badge-grid">
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'Badge' %}
+                    <div class="c-pi-badge" {{ block.shopify_attributes }}>
+                      {% render 'c-icon-check-badge' %}
+                      <div class="c-pi-badge-text">{{ block.settings.block_paragraph }}</div>
+                    </div>
+                {% endcase %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if ProductCheck != blank %}
+            <div class="c-pi-product-checks">
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'ProductCheck' %}
+                    <div class="c-pi-product-check" {{ block.shopify_attributes }}>{% render 'c-icon-check' %} <div>{{ block.settings.product_check }}</div></div>
+                {% endcase %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <div class="c-pi-product-checks">
+            {% for benefit in myProd.metafields.custom.hero_benefits.value %}
+              <div class="c-pi-product-check">{% render 'c-icon-check' %} {{ benefit.paragraph | metafield_tag }}</div>
+            {% endfor %}
+          </div>
+          {% if section.settings.extra_paragraph2 != empty %}
+            <div class="c-pi-extra-text c-text2">{{ section.settings.extra_paragraph2 }}</div>
+          {% endif %}
+          {% if partnershipLogos != blank %}
+            <div class="c-pi-logos-wrap">
+              <div class="c-pi-logos">
+                {% for block in partnershipLogos %}
+                  {% if block.settings.partnership_logo %}
+                    <div class="c-pi-logo-div">
+                      {{ block.settings.partnership_logo | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto' }}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          <div class="c-pi-tabs">
+            <details class="c-pi-tab-details" open>
+              <summary class="c-pi-tab-summary">Description<span>{% render 'icon-plus' %}</span></summary>
+              <div class="c-pi-tab-content">{{ myProd.description }}</div>
+            </details>
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'Tab' %}
+                  <details class="c-pi-tab-details" {{ block.shopify_attributes }}>
+                    <summary class="c-pi-tab-summary">{{ block.settings.tab_name }}<span>{% render 'icon-plus' %}</span></summary>
+                    <div class="c-pi-tab-content">
+                      {{ block.settings.tab_paragraph }}
+                      {% if block.settings.tab_video1 %}
+                        {% assign tabVideo1Poster = block.settings.tab_video1.preview_image | image_url %}
+                        {{ block.settings.tab_video1 | media_tag: autoplay: false, loop: false, muted: true, controls: true, poster: tabVideo1Poster }}
+                      {% endif %}
+                      {% if block.settings.tab_video2 %}
+                        {% assign tabVideo2Poster = block.settings.tab_video2.preview_image | image_url %}
+                        {{ block.settings.tab_video2 | media_tag: autoplay: false, loop: false, muted: true, controls: true, poster: tabVideo2Poster }}
+                      {% endif %}
+                    </div>
+                  </details>
+              {% endcase %}
+            {% endfor %}
+          </div>
+          {% if section.settings.show_see_more_faqs == true %}
+            <div class="c-pi-more-faqs">
+              <a href="#FAQs">See More FAQs</a>
+            </div>
+          {% endif %}
+          <div class="c-pi-reviews">
+            {% if appBlocks != blank %}
+              {% for block in appBlocks %}
+                {% if forloop.first == false %}
+                  {% render block %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </div>
+          {% if section.settings.show_see_more_reviews == true %}
+            <div class="c-pi-reviews-link">
+              <a href="#reviews">See Our Reviews</a>
+            </div>
+          {% endif %}
+          {% if publicationLogos != blank %}
+            <div class="c-pi-logos-wrap">
+              <p>As Featured In</p>
+              <div class="c-pi-logos c-grid">
+                {% for block in publicationLogos %}
+                  {% if block.settings.publication_logo %}
+                    <div class="c-pi-logo-div">
+                      {{ block.settings.publication_logo | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto' }}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </product-info>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  // Images Swiper
+  var swiper = new Swiper("#{{ section.id }} .c-pi-thumbs-slider", {
+    spaceBetween: 6,
+    slidesPerView: 5.5,
+    freeMode: true,
+    allowTouchMove: true,
+    watchSlidesProgress: true,
+  });
+  var swiper2 = new Swiper("#{{ section.id }} .c-pi-main-slider", {
+    loop: true,
+    spaceBetween: 2,
+    pagination: {
+      el: "#{{ section.id }} .c-pi-main-slider .swiper-pagination",
+      clickable: true,
+      enabled: true
+    },
+    keyboard: {
+      enabled: true,
+    },
+    navigation: {
+      nextEl: "#{{ section.id }} .swiper-button-next",
+      prevEl: "#{{ section.id }} .swiper-button-prev",
+    },
+    thumbs: {
+      swiper: swiper,
+    },
+  });
+</script>
+<script type="lazyload_int">
+  var product = {{ myProd | json }};
+
+  document.querySelectorAll(".c-pi-label").forEach(label => {
+    label.addEventListener("change", () => {
+
+      document.querySelectorAll(".c-pi-label").forEach(label2 => {
+        label2.classList.remove("c-pi-active-label");
+      });
+      label.classList.add("c-pi-active-label");
+
+      var selectedOptions = [];
+
+      // get selected options into empty array
+      document.querySelectorAll(".c-pi-label input[type='radio']:checked").forEach(label => {
+        selectedOptions.push(label.value);
+      });
+
+      // find the right variant and set it to a variable
+      var matchedVariant = product.variants.find(variant => {
+        var pass = true;
+        for (var i = 0; i < selectedOptions.length; i++) {
+          // if the selected option is not in the variant options array, set pass to false
+          if (selectedOptions.indexOf(variant.options[i]) == -1) {
+            pass = false;
+            break;
+          }
+        }
+
+        return pass;
+      });
+
+      // set the master input value to the variant id
+      document.querySelector("#{{ section.id }} .c-pi-master-input").value = matchedVariant.id;
+
+      // deeplink the url
+      var currentUrl = document.URL.split("?")[0];
+      newUrl = currentUrl + "?variant=" + matchedVariant.id;
+      window.history.replaceState(null, null, newUrl);
+
+
+      // Update variant price
+      document.querySelector("#{{ section.id }} .c-pi-normal-price").innerHTML = formatMoney(matchedVariant.price, "{{ shop.money_format }}");
+      document.querySelector("#{{ section.id }} .c-pi-compare-price").innerHTML = formatMoney(matchedVariant.compare_at_price, "{{ shop.money_format }}");
+
+      // show or don't show the compare price
+      if (matchedVariant.compare_at_price > matchedVariant.price) {
+        document.querySelector("#{{ section.id }} .c-pi-compare-price").classList.remove("c-pi-price-hide");
+      } else {
+        document.querySelector("#{{ section.id }} .c-pi-compare-price").classList.add("c-pi-price-hide");
+      }
+
+      // update the atc button
+      var atcButton = document.querySelector("#{{ section.id }} .c-pi-atc");
+
+      if (matchedVariant.available) {
+        atcButton.disabled = false;
+        atcButton.style.opacity = "1";
+        atcButton.style.pointerEvents = "unset";
+      } else {
+        atcButton.disabled = true;
+        atcButton.style.opacity = "0.2";
+        atcButton.style.pointerEvents = "none";
+      }
+    });
+  });
+
+
+  // modal swiper
+  var modalSwiper = new Swiper("#{{ section.id }} .c-pi-modal-slider", {
+    loop: true,
+    spaceBetween: 5,
+    zoom: true,
+    pagination: {
+      el: "#{{ section.id }} .c-pi-modal-slider .swiper-pagination",
+      clickable: true,
+      enabled: true
+    },
+    navigation: {
+      nextEl: "#{{ section.id }} .c-pi-modal-slider .swiper-button-next",
+      prevEl: "#{{ section.id }} .c-pi-modal-slider .swiper-button-prev",
+    },
+    keyboard: {
+      enabled: true,
+    },
+    breakpoints: {
+      {{ settings.c_breakpoint3 }}: {
+        pagination: {
+          el: "#{{ section.id }} .c-pi-modal-slider .swiper-pagination",
+          clickable: true,
+          enabled: true
+        }
+      }
+    },
+  });
+
+
+  // modal swiper js
+  document.querySelector("#{{ section.id }} .c-pi-modal-close").addEventListener("click", () => {
+    document.querySelector("#{{ section.id }} .c-pi-modal").setAttribute("open", "false");
+  });
+
+  document.querySelector("#{{ section.id }} .c-pi-modal").addEventListener("click", () => {
+    document.querySelector("#{{ section.id }} .c-pi-modal").setAttribute("open", "false");
+  });
+
+  document.querySelector("#{{ section.id }} .c-pi-modal").querySelector(".c-pi-modal-slider").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    return false;
+  });
+
+  document.querySelectorAll("#{{ section.id }} .c-pi-main-slider .swiper-slide img").forEach(image => {
+    image.addEventListener("click", () => {
+      document.querySelector("#{{ section.id }} .c-pi-modal").setAttribute("open", "true");
+    });
+  });
+
+  document.querySelector("#{{ section.id }} .c-pi-fullscreen").addEventListener("click", () => {
+    document.querySelector("#{{ section.id }} .c-pi-modal").setAttribute("open", "true");
+  });
+
+  //zoom js
+  modalSwiper.on('zoomChange', (swiper, scale) => {
+    if(scale > 2){
+      document.querySelector("#{{ section.id }} .c-pi-modal-zoom").querySelector(".c-icon-zoom-middle").style.display = "none";
+      document.querySelector("#{{ section.id }} .c-pi-modal-zoom").style.opacity = "0.6";
+    } else {
+      document.querySelector("#{{ section.id }} .c-pi-modal-zoom").querySelector(".c-icon-zoom-middle").style.display = "block";
+      document.querySelector("#{{ section.id }} .c-pi-modal-zoom").style.opacity = "1";
+    }
+  });
+
+  document.querySelector("#{{ section.id }} .c-pi-modal-zoom").addEventListener("click", function(e) {
+    if(modalSwiper.zoom.scale < 2){
+      modalSwiper.zoom.in();
+    } else {
+      modalSwiper.zoom.out();
+    }
+  })
+
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Product Info",
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "name": "Tab",
+        "type": "Tab",
+        "limit": 10,
+        "settings": [
+          {
+            "type": "text",
+            "id": "tab_name",
+            "label": "Tab Name",
+            "default": "Description"
+          },
+          {
+            "type": "richtext",
+            "id": "tab_paragraph",
+            "label": "Tab Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "video",
+            "id": "tab_video1",
+            "label": "Video Upload 1"
+          },
+          {
+            "type": "video",
+            "id": "tab_video2",
+            "label": "Video Upload 2"
+          }
+        ]
+      },
+      {
+        "name": "Badge",
+        "type": "Badge",
+        "limit": 10,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>free shipping on orders over $100</p>"
+          }
+        ]
+      },
+      {
+        "name": "PartnershipLogos",
+        "type": "PartnershipLogos",
+        "limit": 10,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "partnership_logo",
+            "label": "Partnership Logo"
+          }
+        ]
+      },
+      {
+        "name": "PublicationLogos",
+        "type": "PublicationLogos",
+        "limit": 10,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "publication_logo",
+            "label": "Publication Logo"
+          }
+        ]
+      },
+      {
+        "name": "ProductCheck",
+        "type": "ProductCheck",
+        "limit": 10,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "product_check",
+            "label": "Product Check",
+            "default": "<p>Risk Free: 30 day at-home trial</p>"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "use_new_images",
+        "label": "Use new images",
+        "default": false
+      },
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+      },
+      {
+        "type": "text",
+        "id": "custom_product_name",
+        "label": "Custom Product Name"
+      },
+      {
+        "type": "richtext",
+        "id": "extra_paragraph1",
+        "label": "Exta Paragraph 1"
+      },
+      {
+        "type": "richtext",
+        "id": "extra_paragraph2",
+        "label": "Exta Paragraph 2"
+      },
+      {
+        "type": "text",
+        "id": "c_product_below_atc_text",
+        "label": "Below ATC text",
+        "default": "✅ 180 day money-back guarantee"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_dynamic_pay_button",
+        "label": "Show dynamic pay button",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_badges",
+        "label": "Show payment badges",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_see_more_faqs",
+        "label": "Show see more FAQs",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_see_more_reviews",
+        "label": "Show see more reviews",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "section_container",
+        "label": "Section container",
+        "default": "page-width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "Normal"
+          },
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "page-width2",
+            "label": "Smaller"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Product Info"
+      }
+    ]
+  }
+{% endschema %}

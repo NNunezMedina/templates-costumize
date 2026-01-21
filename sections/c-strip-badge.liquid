@@ -1,0 +1,176 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+    background: {{ section.settings.background }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-sb-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.5em;
+  }
+
+  #{{ section.id }} .c-sb-wrapper img {
+    width: 10em;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-sb-wrapper">
+      {% if section.settings.image %}
+        {{ section.settings.image | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto' }}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Strip Badge",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color_background",
+        "id": "background",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Strip Badge"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,398 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} p,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-tt-tab-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  #{{ section.id }} .c-tt-tt-each {
+    padding: 1em 1em 0em 1em;
+    margin: 0em 1em;
+    min-width: fit-content;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #{{ section.id }} .c-tt-tt-heading {
+    font-weight: bold;
+  }
+    
+  #{{ section.id }} .c-tt-tab-top img {
+    border-radius: 100%;
+    width: 80px;
+    margin-bottom: 0.5em;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+  }
+
+  #{{ section.id }} .c-tt-tab-top p,
+  #{{ section.id }} .c-tt-must-have {
+    text-transform: uppercase;
+  }
+
+  #{{ section.id }} .c-tt-tab-content {
+    background-color: ;
+  }
+
+  #{{ section.id }} .c-tt-tc-main {
+    padding: 2em 1.5em;
+    grid-template-columns: 0.75fr 1fr;
+    gap: 1.5em;
+    display: none;
+  }
+    
+  #{{ section.id }} .c-tt-tc-left video {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-tt-tc-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  #{{ section.id }} .c-tt-tcr-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5em;
+  }
+
+  #{{ section.id }} .c-tt-products-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-tt-tab-active {
+    background-color: {{ section.settings.active_bg_color }};
+  }
+
+  #{{ section.id }} .c-tt-tc-main.c-tt-tab-active {
+    display: grid !important;
+  }
+
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-tt-tab-top {
+      justify-content: normal;
+    }
+
+    #{{ section.id }} .c-tt-tt-each {
+      margin: 0em;
+    }
+    
+    #{{ section.id }} .c-tt-tc-main {
+      grid-template-columns: 1fr;
+    }
+
+    #{{ section.id }} .c-tt-tab-top img {
+      display: none;
+    }
+
+    #{{ section.id }} .c-tt-products-div {
+      grid-template-columns: 1fr;
+    }
+
+    #{{ section.id }} .c-tt-product-card {
+      display: grid;
+      grid-template-columns: 0.5fr 1fr;
+      gap: 1em;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-tt-tab">
+      <div class="c-tt-tab-top">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'Item' %}
+              <div class="c-tt-tt-each{% if forloop.index == 1 %} c-tt-tab-active{% endif %}" {{ block.shopify_attributes }}>
+                {% if block.settings.tab_top_picture %}
+                  {{ block.settings.tab_top_picture | image_url: width: 500 | image_tag: loading: 'lazy', height: 'auto' }}
+                {% endif %}
+                <p class="c-tt-tt-heading">{{ block.settings.tab_top_heading }}</p>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      <div class="c-tt-tab-content">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'Item' %}
+              <div class="c-tt-tc-main{% if forloop.index == 1 %} c-tt-tab-active{% endif %}">
+                <div class="c-tt-tc-left">
+                  {% if block.settings.block_image %}
+                    {{ block.settings.block_image | image_url: width: 1250 | image_tag: loading: 'lazy', height: 'auto' }}
+                  {% endif %}
+                  {% if block.settings.block_video %}
+                    {{ block.settings.block_video | media_tag: autoplay: true, loop: true, muted: true, controls: true }}
+                  {% endif %}
+                </div>
+                <div class="c-tt-tc-right">
+                  <div class="c-tt-tcr-inner">
+                    <h3>{{ block.settings.tab_name }}</h3>
+                    <div>{{ block.settings.tab_paragraph }}</div>
+                    {% assign productBlocks = block.settings.tab_product_list %}
+                    {% if productBlocks != blank %}
+                      <p class="c-tt-must-have">{{ block.settings.tab_bottom_line }}</p>
+                      <div class="c-tt-products-div">
+                        {% for product in block.settings.tab_product_list %}
+                          <a class="c-tt-product-card" href="{{ product.url }}">
+                            <div class="c-tt-ci-div">
+                              {% if product.featured_image %}
+                                {{ product.featured_image | image_url: width: 500 | image_tag: loading: 'lazy', height: 'auto' }}
+                              {% endif %}
+                            </div>
+                            <p>{{ product.title }}</p>
+                          </a>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  var tabs = document.querySelectorAll("#{{ section.id }} .c-tt-tt-each");
+  var contents = document.querySelectorAll('#{{ section.id }} .c-tt-tc-main');
+    
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+      contents.forEach((content) => {
+        content.classList.remove('c-tt-tab-active');
+      });
+      tabs.forEach((tab) => {
+        tab.classList.remove('c-tt-tab-active');
+      });
+      
+      contents[index].classList.add('c-tt-tab-active');
+      tabs[index].classList.add('c-tt-tab-active');
+    });
+  });
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Testimonial Tabs",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "tab_top_picture",
+            "label": "Top Picture"
+          },
+          {
+            "type": "text",
+            "id": "tab_top_heading",
+            "label": "Top Heading",
+            "default": "Tab Top"
+          },
+          {
+            "type": "video",
+            "id": "block_video",
+            "label": "Video Upload"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "tab_name",
+            "label": "Tab Name",
+            "default": "Tab Name"
+          },
+          {
+            "type": "richtext",
+            "id": "tab_paragraph",
+            "label": "Tab Paragraph",
+            "default": "<p><strong>Detail one:</strong> Lorem ipsum<br><strong>Detail two:</strong> Lorem ipsum<br><strong>Detail three:</strong> Lorem ipsum<br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "text",
+            "id": "tab_bottom_line",
+            "label": "Tab bottom line",
+            "default": "Name's Favourite Product:"
+          },
+          {
+            "type": "product_list",
+            "id": "tab_product_list",
+            "label": "Tab Products",
+            "limit": 3
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "active_bg_color",
+        "label": "Active background color",
+        "default": "#f1f1f1"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Testimonial Tabs",
+        "blocks": [
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

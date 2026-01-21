@@ -1,0 +1,278 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-cc-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+  }
+
+  #{{ section.id }} .c-cc-item > * {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #{{ section.id }} .c-cc-swiper-buttons {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0%;
+    width: 100%;
+    z-index: 1;
+  }
+
+  #{{ section.id }} .c-cc-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    height: auto;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-cc-swiper-buttons .swiper-arrow {
+    position: static;
+    background-color: #fff;
+    width: 2.5em;
+    height: 2.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+  }
+
+  #{{ section.id }} .c-cc-swiper-buttons .swiper-arrow::after {
+    font-size: 1.25em;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-cc-swiper-buttons .swiper-arrow {
+      width: 2.25em;
+      height: 2.25em;
+    }
+
+    #{{ section.id }} .c-cc-swiper-buttons .swiper-arrow::after {
+      font-size: 1em;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="{{ section.settings.section_container }}">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        {% for item in product.metafields.custom.carousel.value %}
+          <div class="swiper-slide c-cc-item">
+            {% if item.media_type == "image" %}
+              {{ item | image_url: width: 2000 | image_tag: loading: 'lazy', height: 'auto' }}
+            {% elsif item.media_type == "video" %}
+              {% assign myPoster = item.preview_image | image_url %}
+              {{ item | media_tag: autoplay: false, loop: true, muted: true, controls: true, poster: myPoster }}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="c-cc-swiper-buttons">
+        <div class="page-width c-cc-buttons-container">
+          <div class="swiper-button-prev swiper-arrow"></div>
+          <div class="swiper-button-next swiper-arrow"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", (event) => {
+    var swiper = new Swiper("#{{ section.id }} .mySwiper", {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      loop: true,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      navigation: {
+        nextEl: "#{{ section.id }} .swiper-button-next",
+        prevEl: "#{{ section.id }} .swiper-button-prev",
+      },
+      breakpoints: {
+        // when window width is >= 1200px
+        {{ settings.c_breakpoint1 }}: {
+          slidesPerView: 2.5
+        },
+        // when window width is >= 990px
+        {{ settings.c_breakpoint2 }}: {
+          slidesPerView: 2.5
+        },
+        // when window width is >= 768px
+        {{ settings.c_breakpoint3 }}: {
+          slidesPerView: 1
+        }
+      }
+    });
+  });
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Content Carousel",
+    "settings": [
+      {
+        "type": "select",
+        "id": "section_container",
+        "label": "Section container",
+        "default": "page-width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "Normal"
+          },
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "page-width2",
+            "label": "Smaller"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Content Carousel"
+      }
+    ]
+  }
+{% endschema %}

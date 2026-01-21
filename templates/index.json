@@ -35,50 +35,115 @@
         "heading",
         "button"
       ],
+      "disabled": true,
       "settings": {
         "image_overlay_opacity": 40,
         "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
         "image_behavior": "none",
+        "desktop_content_position": "bottom-center",
         "desktop_content_alignment": "center",
+        "show_text_box": false,
         "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
         "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
         "show_text_below": false
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "c_blocks_cVYJJY": {
+      "type": "c-blocks",
+      "blocks": {
+        "item_wfBTya": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
+            "block_image": "shopify://shop_images/Container_imagechicken.png"
+          }
+        },
+        "item_4QwqiV": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
+            "block_image": "shopify://shop_images/Container_imagechicken.png"
+          }
+        },
+        "item_rhdqzd": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
+            "block_image": "shopify://shop_images/Container_imagechicken.png"
+          }
+        }
+      },
+      "block_order": [
+        "item_wfBTya",
+        "item_4QwqiV",
+        "item_rhdqzd"
+      ],
+      "name": "C Blocks",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "blocks_direction": "vertical",
+        "blocks_alignment": "left",
+        "icon_width": 3,
+        "section_container": "page-width",
+        "use_separator_boder": false,
+        "columns": 3,
+        "mobile_columns": 1,
+        "button_text": "Buy Now",
+        "button_url": "",
+        "button_style": "c-b1",
+        "accent_color": "#5d3be4",
+        "bg_color": "#ffffff",
+        "text_color": "#000000",
+        "section_top_subheading": "subheading",
+        "section_top_heading": "My heading",
+        "section_top_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
+        "section_top_alignment": "center",
+        "text_alignment": "center",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_card_banner_4qxnyJ": {
+      "type": "c-card-banner",
+      "blocks": {
+        "button_efCFHk": {
+          "type": "Button",
+          "settings": {
+            "button_text": "Shop Now",
+            "button_url": "",
+            "button_style": "c-b1"
+          }
+        }
+      },
+      "block_order": [
+        "button_efCFHk"
+      ],
+      "name": "C Card Banner",
+      "settings": {
+        "bg_image": "shopify://shop_images/kitchen_table_tools_repositioned.png",
+        "enable_card_bg": true,
+        "heading2": "<p>Heading card</p>",
+        "paragraph": "<p>Lorem ipsum card</p>",
+        "bg_card_color": "#f3f3f3",
+        "bottom_bg_card_color": "#334fb4",
+        "bg_color": "#ffffff",
+        "text_color": "#000000",
+        "section_top_subheading": "subheading",
+        "section_top_heading": "heading",
+        "section_top_paragraph": "<p>lorem ipsum</p>",
+        "section_top_alignment": "center",
+        "section_top_text_alignment": "center",
+        "padding_top": 4,
+        "padding_bottom": 4
       }
     }
   },
   "order": [
     "image_banner",
-    "featured_collection"
+    "c_blocks_cVYJJY",
+    "c_card_banner_4qxnyJ"
   ]
 }

@@ -1,0 +1,482 @@
+<style>
+  #{{ section.id }} {
+    position: relative;
+    display: flex;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h1,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} > img:not(.c-corner-image) {
+    width: 100%;
+    object-fit: cover;
+    object-position: bottom;
+    min-height: calc(100vh - var(--nav-sticky-size) - var(--annoucement-sticky-size));
+    max-height: calc(100vh - var(--nav-sticky-size) - var(--annoucement-sticky-size));
+  }
+
+  #{{ section.id }} .c-corner-image {
+    position: absolute;
+    top: 0em;
+    right: 0em;
+    width: 7rem;
+    z-index: 1;
+  }
+
+  #{{ section.id }} .c-hb-content {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    {% if section.settings.use_bg_gradient == true %}
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.65) 40%, rgba(0, 0, 0, 0.00) 75.09%);
+    {% else %}
+      background: rgba(0, 0, 0, 0.75);
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-hb-content > .page-width {
+    width: 100%;
+    max-width: 1300px;
+  }
+
+  #{{ section.id }} .c-hb-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: {{ section.settings.container_max_width }};
+    margin-right: auto;
+  }
+
+  {% if section.settings.use_bg_gradient == false %}
+    #{{ section.id }} .c-hb-heading {
+      background: linear-gradient(90deg, #FFF 0%, #F60 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  {% endif %}
+  
+
+  #{{ section.id }} .c-section-top-subheading {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    {% if section.settings.benefits_stacked == false %}
+      font-weight: bold;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-hb-stars {
+    display: flex;
+  }
+
+  #{{ section.id }} .c-hb-stars svg {
+    width: 1rem;
+    color: var(--brand-primary);
+  }
+
+  #{{ section.id }} .c-hb-paragraph {
+    font-size: 1.3rem;
+    line-height: 140%;
+    max-width: 600px;
+  }
+
+  #{{ section.id }} .c-hb-benefits {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: {{ section.settings.section_top_alignment }};
+    gap: 0.75rem;
+    {% if section.settings.benefits_stacked == false %}
+      display: block;
+    {% endif %}
+    {% if section.settings.buttons_full_width == true %}
+      margin: 1rem 0rem 1rem 0rem;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-hb-benefit {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    font-size: 1.125rem;
+    {% if section.settings.benefits_stacked == false %}
+      display: inline-flex;
+      margin: 0rem 1rem 0.75rem 0rem;
+      gap: 0.2rem;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-hb-benefit svg {
+    width: 1.5rem;
+  }
+
+  #{{ section.id }} .c-hb-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  #{{ section.id }} .c-hb-button {
+    width: fit-content;
+    {% if section.settings.buttons_full_width == true %}
+      width: 100%;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-hb-buttons .c-hb-button:first-child {
+    width: 100%;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+
+  #{{ section.id }} .c-hb-logos {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  #{{ section.id }} .c-hb-logo {
+    opacity: 0.75;
+    transition: 0.2s ease;
+  }
+
+  #{{ section.id }} .c-hb-logo:hover {
+    opacity: 1;
+  }
+
+  #{{ section.id }} .c-hb-logo img {
+    /* width: 5rem; */
+    height: 2.5rem;
+    filter: invert(1);
+    object-fit: contain;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-hb-content {
+      background: rgba(0, 0, 0, 0.75);
+    }
+    
+    #{{ section.id }} .c-hb-paragraph {
+      font-size: 1.125rem;
+      line-height: 130%;
+    }
+
+    #{{ section.id }} .c-hb-benefit {
+      gap: 0.4rem;
+      font-size: 1rem;
+    }
+
+    #{{ section.id }} .c-hb-benefit svg {
+      width: 1.25rem;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}">
+  {% if section.settings.bg_image %}
+    {{ section.settings.bg_image | image_url: width: 2500 | image_tag: loading: 'lazy', height: 'auto' }}
+  {% endif %}
+  {% if section.settings.corner_image %}
+    {{ section.settings.corner_image | image_url: width: 750 | image_tag: loading: 'eager', height: 'auto', class: 'c-corner-image' }}
+  {% endif %}
+  <div class="c-hb-content">
+    <div class="page-width">
+      <div class="c-hb-wrap">
+        {% if section.settings.section_top_subheading != empty %}
+          <div class="c-section-top-subheading">
+            <div class="c-hb-stars">
+              {% for i in (1..5) %}
+                {% render 'c-icon-star' %}
+              {% endfor %}
+            </div>
+            {{ section.settings.section_top_subheading }}
+          </div>
+        {% endif %}
+        {% if section.settings.section_top_heading != empty %}
+          <h1 class="c-hb-heading">{{ section.settings.section_top_heading }}</h1>
+        {% endif %}
+        {% if section.settings.section_top_paragraph != empty %}
+          <div class="c-t-80 c-hb-paragraph">{{ section.settings.section_top_paragraph }}</div>
+        {% endif %}
+        <div class="c-hb-benefits">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Item' %}
+                <div class="c-hb-benefit">
+                  {% if section.settings.use_check_square == true %}
+                    {% render 'c-icon-check-square' %}
+                  {% else %}
+                    {% render 'c-icon-check-circle' %}
+                  {% endif %}
+                  <div>{{ block.settings.block_heading }}</div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+        <div class="c-hb-buttons">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Button' %}
+                <a class="c-button {{ block.settings.button_style }} c-hb-button" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>
+            {% endcase %}
+          {% endfor %}
+        </div>
+        <div>Shop all top e-cart brands:</div>
+        <div class="c-hb-logos">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Logo' %}
+                {% if block.settings.block_image %}
+                  <a href="{{ block.settings.image_url }}" class="c-hb-logo">
+                    {{ block.settings.block_image | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto' }}
+                  </a>
+                {% endif %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Hero BHG",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_heading",
+            "label": "Benefit heading",
+            "default": "Benefit here"
+          }
+        ]
+      },
+      {
+        "name": "Logo",
+        "type": "Logo",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "image_url",
+            "label": "Image Link"
+          }
+        ]
+      },
+      {
+        "name": "Button",
+        "type": "Button",
+        "limit": 2,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Shop Now"
+          },
+          {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button Link"
+          },
+          {
+            "type": "text",
+            "id": "button_style",
+            "label": "Button style",
+            "default": "c-b1"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "corner_image",
+        "label": "Corner Image"
+      },
+      {
+        "type": "text",
+        "id": "container_max_width",
+        "label": "Container max width",
+        "default": "600px"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_bg_gradient",
+        "label": "Use BG graident",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "use_check_square",
+        "label": "Use check square",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "buttons_full_width",
+        "label": "Buttons full width",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "benefits_stacked",
+        "label": "Benefits stacked",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Background Image"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "My heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Hero BHG"
+      }
+    ]
+  }
+{% endschema %}

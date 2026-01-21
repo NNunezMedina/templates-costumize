@@ -1,0 +1,274 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div:not(.c-button),
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} h2 {
+    color: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-pb-grid {
+    display: grid;
+    grid-template-columns: {{ section.settings.grid_template_columns }};
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-pb-item,
+  #{{ section.id }} .c-pb-item > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #{{ section.id }} .c-pb-item-content {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-pb-item-content .c-button {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-pb-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    width: 100%;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-pb-item-row {
+      flex-direction: column;
+    }
+
+    #{{ section.id }} .c-pb-grid {
+      grid-template-columns: {{ section.settings.grid_template_columns_mobile }};
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-pb-grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'Item' %}
+            <a class="c-pb-item" href="{{ block.settings.product.url }}" {{ block.shopify_attributes }}>
+              <div class="c-pb-item-media">
+                {% if block.settings.product.featured_image %}
+                  {{ block.settings.product.featured_image | image_url: width: 1250 | image_tag: loading: 'lazy', height: 'auto' }}
+                {% endif %}
+              </div>
+              <div class="c-pb-item-content">
+                <div class="c-pb-item-row">
+                  <h3>{{ block.settings.product.title }}</h3>
+                  <div>{{ block.settings.product.price | money }}</div>
+                </div>
+                {%- if section.settings.button_text != empty -%}
+                  <div class="c-button {{ section.settings.button_style }}">{{ section.settings.button_text }}</div>
+                {%- endif -%}
+              </div>
+            </a>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Product Blocks",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "text",
+        "id": "grid_template_columns",
+        "label": "Grid template columns",
+        "default": "1fr 1fr 1fr"
+      },
+      {
+        "type": "text",
+        "id": "grid_template_columns_mobile",
+        "label": "Grid template columns mobile",
+        "default": "1fr 1fr"
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text",
+        "default": "Buy Now"
+      },
+      {
+        "type": "text",
+        "id": "button_style",
+        "label": "Button style",
+        "default": "c-b1"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Product Blocks",
+        "blocks": [
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

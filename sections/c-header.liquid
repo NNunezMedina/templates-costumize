@@ -1,0 +1,1094 @@
+{% assign headerMenu = section.settings.menu %}
+{% assign useAccountIcon = true %}
+{% assign uselogoLink = true %}
+{% assign showMobileCta = true %}
+
+
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- if settings.predictive_search_enabled -%}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+{%- if settings.cart_type == "drawer" -%}
+  {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+  {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+  {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script type="lazyload_int" data-src="{{ 'details-disclosure.js' | asset_url }}"></script>
+<script type="lazyload_int" data-src="{{ 'details-modal.js' | asset_url }}"></script>
+<script type="lazyload_int" data-src="{{ 'cart-notification.js' | asset_url }}"></script>
+<script type="lazyload_int" data-src="{{ 'search-form.js' | asset_url }}"></script>
+{%- if settings.cart_type == "drawer" -%}
+  <script type="lazyload_int" data-src="{{ 'cart-drawer.js' | asset_url }}"></script>
+{%- endif -%}
+
+
+<style>
+  :root {
+    --header-border-top: rgba(0, 0, 0, 0.1);
+    --header-border: rgba(0, 0, 0, 0.6);
+    --header-border2: rgba(0, 0, 0, 0.2);
+    --header-white: rgba(0, 0, 0, 1);
+    --header-bg-black: rgba(255, 255, 255, 1);
+    --header-bg-link-hover: rgba(255,255,255,0.15);
+    --header-drawer-bg: rgba(0,0,0,0.5);
+    --header-button: #333;
+    --header-link: rgba(0, 0, 0, 0.8);
+  }
+
+  .shopify-section-group-header-group.c-h-header {
+    position: sticky;
+    top: 0em;
+  }
+
+  #{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    transition: 0.2s ease;
+    font-size: 16px;
+    border-bottom: 1px solid var(--header-border-top);
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div:not(.cart-count-bubble, .c-h-link, .c-h-link-right),
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-h-wrapper {
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-h-inner {
+    gap: 1em;
+    display: grid;
+    grid-template-columns: 0.4fr 2fr 0.4fr;
+  }
+
+  #{{ section.id }} .c-h-inner > * {
+    display: flex;
+    align-items: center;
+  }
+
+  /* left */
+  /*#region*/
+    #{{ section.id }} .c-h-left {
+      justify-content: flex-start;
+      gap: 1.5em;
+    }
+
+    #{{ section.id }} .c-h-logo-link {
+      display: flex;
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+    }
+
+    #{{ section.id }} .c-h-logo {
+      width: {{ settings.logo_width }}px;
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-h-logo:hover {
+      filter: none;
+    }
+  /*#endregion*/
+
+  /* mobile nav */
+  /*#region*/
+    #{{ section.id }} .c-h-mobile-nav {
+      display: none;
+    }
+
+    #{{ section.id }} .c-h-mobile-nav .c-h-mobile-hamburger {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    #{{ section.id }} .c-h-mobile-nav .c-h-mobile-hamburger svg {
+      color: var(--header-link);
+      width: 1.3em;
+      height: 1.3em;
+    }
+
+    #{{ section.id }} .c-h-mobile-nav .c-h-mobile-hamburger {
+      position: relative;
+    }
+
+    #{{ section.id }} #c-h-drawer-wrapper {
+      position: fixed;
+      left: 0em;
+      top: 0em;
+      width: 100%;
+      min-height: 100vh;
+      display: none;
+      grid-template-columns: 1fr 0fr;
+      gap: 0em;
+      z-index: 4;
+      background-color: var(--header-drawer-bg);
+      max-height: 100vh;
+      overflow: auto;
+    }
+
+    #{{ section.id }} #c-h-drawer {
+      background-color: {{ section.settings.mobile_drawer_bg_color }};
+      padding-bottom: 3.5em;
+      transform: translateX(-83.333333vw);
+    }
+
+    #{{ section.id }} .c-h-drawer-top {
+      width: 100%;
+      padding: 1em 1.5em 1em 1.5em;
+      display: flex;
+      justify-content: space-between;
+      color: var(--header-white);
+      border-bottom: 1px solid var(--header-border-top);
+    }
+
+    #{{ section.id }} .c-h-drawer-logo-link {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #{{ section.id }} #c-h-close {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    #{{ section.id }} .c-h-drawer-top svg {
+      width: 1em;
+    }
+
+    #{{ section.id }} #c-h-navigation {
+      padding: 0em 0em 1em 0em;
+    }
+
+    #{{ section.id }} .c-h-lvl1-div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    #{{ section.id }} .c-h-lvl1-div > *:first-child .c-h-link,
+    #{{ section.id }} .c-h-lvl1-div > *:first-child .c-h-link .c-h-menu-button {
+      color: var(--header-white);
+    }
+
+    #{{ section.id }} .c-h-lvl1-div > *:first-child .c-h-link span {
+      position: relative;
+    }
+
+    #{{ section.id }} .c-h-link-div {
+      display: flex;
+      width: 100%;
+    }
+
+    #{{ section.id }} .c-h-link {
+      padding: 1em 1.5em 1em 1.5em;
+      width: 100%;
+      font-weight: 700;
+      color: var(--header-border);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.75em;
+      border-bottom: 1px solid var(--header-border-top);
+    }
+
+    #{{ section.id }} .c-h-link:hover {
+      color: var(--header-white);
+    }
+
+    #{{ section.id }} .c-h-link.c-h-lvl2 {
+      justify-content: space-between;
+    }
+
+    #{{ section.id }} .c-h-link-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1em;
+    }
+
+    #{{ section.id }} .c-h-link-right .c-h-menu-button {
+      font-size: 0.875em;
+      color: var(--header-border);
+      text-decoration: underline;
+    }
+
+    #{{ section.id }} .c-h-link-right .c-h-menu-button:hover {
+      color: var(--header-white);
+    }
+
+    #{{ section.id }} .c-h-lvl2-details {
+      width: 100%;
+    }
+
+    #{{ section.id }} .c-h-lvl2-details[open] > summary .c-h-lvl2-icon svg {
+      transform: rotate(90deg);
+    }
+
+    /* #{{ section.id }} .c-h-lvl2-details[open] > summary > .c-h-link {
+      border-bottom: 1px solid var(--header-drawer-bg);
+    } */
+
+    #{{ section.id }} .c-h-lvl2-details[open] .c-h-lvl2-page {
+      border-bottom: 1px solid var(--header-drawer-bg);
+    }
+
+    #{{ section.id }} .c-h-lvl2-icon {
+      /* position: absolute;
+      right: 1.5em;
+      top: 50%;
+      transform: translateY(-50%); */
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-h-lvl2-icon svg {
+      width: 1em;
+      /* color: var(--header-white); */
+    }
+
+    #{{ section.id }} .c-h-button {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: flex-start;
+      border: none;
+      border-radius: 0em;
+      background-color: var(--header-button);
+      padding: 1em 2em;
+      color: var(--header-white);
+    }
+
+    #{{ section.id }} .c-h-button svg {
+      transform: rotate(180deg);
+      margin-right: 0.5em;
+      width: 1em;
+    }
+
+    #{{ section.id }} .c-h-lvl2-link-div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #{{ section.id }} .c-h-lvl2-page,
+    #{{ section.id }} .c-h-lvl3-page {
+      /*position: absolute;
+      top: 0em;
+      left: 0em;*/
+      /*height: 80vh;*/
+      width: 100%;
+      overflow: auto;
+      z-index: 1;
+      /* padding-left: 2em; */
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      /* gap: 0.5em; */
+      background-color: {{ section.settings.mobile_drawer_bg_color }};
+    }
+
+    #{{ section.id }} .c-h-lvl3-page {
+      z-index: 2;
+    }
+
+    #{{ section.id }} .c-h-menu-actions {
+      display: flex;
+      /*flex-direction: column;*/
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 0em 1.5em 0em 1.5em;
+      gap: 1em;
+    }
+
+    #{{ section.id }} .c-h-mobile-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 0em;
+      padding: 1.5em 1.5em 0em 1.5em;
+      gap: 0.5em;
+      {% if showMobileCta == false %}
+        display: none;
+      {% endif %}
+    }
+
+    #{{ section.id }} .c-h-mobile-button {
+      width: 100%;
+      text-align: center;
+    }
+
+    #{{ section.id }} #c-h-drawer-overlay {
+      display: block !important;
+    }
+  /*#endregion*/
+
+  /* nav */
+  /*#region*/
+    #{{ section.id }} .c-h-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl1-div {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-details,
+    #{{ section.id }} .c-h-nav-lvl2-details summary {
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-summary {
+      display: flex;
+      align-items: center;
+      gap: 0.2em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-summary > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--header-border);
+      margin-top: 2px;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-details {
+      position: relative;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl1-link {
+      color: var(--header-border);
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.2s ease;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1.2em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl1-div > *:first-child,
+    #{{ section.id }} .c-h-nav-lvl1-div > *:first-child .c-h-nav-lvl1-link,
+    #{{ section.id }} .c-h-nav-lvl1-div > *:first-child .c-h-nav-lvl2-icon svg {
+      color: var(--header-white);
+      font-weight: 600;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl1-div > *:first-child:hover,
+    #{{ section.id }} .c-h-nav-lvl1-div > *:first-child:hover .c-h-nav-lvl1-link,
+    #{{ section.id }} .c-h-nav-lvl1-div > *:first-child:hover .c-h-nav-lvl2-icon svg {
+      color: var(--brand-primary);
+    }
+
+    #{{ section.id }} .c-h-nav-lvl1-link:hover,
+    #{{ section.id }} .c-h-nav-lvl2-details[open] .c-h-nav-lvl1-link,
+    #{{ section.id }} .c-h-nav-lvl2-details[open] .c-h-nav-lvl2-icon svg {
+      color: var(--header-white);
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-details .c-h-nav-lvl2-icon svg {
+      transition: 0.2s ease;
+      width: 0.7em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-details[open] .c-h-nav-lvl2-icon svg {
+      transform: rotate(180deg);
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-div {
+      max-width: 100vw;
+      width: max-content;
+      padding: 0em;
+      background-color: var(--header-bg-black);
+      border: 1px solid var(--header-border2);
+      position: absolute;
+      top: 80%;
+      left: -100%;
+      z-index: 1;
+      cursor: default;
+      border-radius: 0em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-grid {
+      display: flex;
+      justify-content: center;
+      /* flex-direction: column; */
+      gap: 0em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-item {
+      width: 11em;
+      padding: 0.75em;
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-h-lvl2-page .c-h-nav-lvl2-item {
+      width: auto;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-item:hover {
+      background-color: var(--brand-primary);
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-item:hover div,
+    #{{ section.id }} .c-h-nav-lvl2-item:hover svg {
+      color: #fff;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-item:hover .c-h-nav-lvl2-title {
+      text-decoration: underline;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-image-div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-image-div img {
+      max-height: 15em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-title {
+      color: var(--header-white);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 0.35em;
+      margin-bottom: 0.35em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-title:hover {
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-benefits > div {
+      /* display: inline-flex;
+      margin: 0em 1em 0.75em 0em; */
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 0.2em;
+      font-weight: normal;
+      font-size: 0.875em;
+      line-height: 150%;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl2-benefits svg {
+      width: 1em;
+      min-width: 1em;
+      color: var(--brand-primary);
+    }
+
+    #{{ section.id }} .c-h-nav-lvl3-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-width: 10%;
+      align-items: flex-start;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl3-div {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl3-link {
+      color: var(--header-link);
+      margin-right: auto;
+      transition: 0.2s ease;
+      padding: 0.5em 1em;
+      width: 100%;
+      border-radius: 0.5em;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    #{{ section.id }} .c-h-nav-lvl3-link:hover {
+      color: var(--header-white);
+      background-color: var(--header-bg-link-hover);
+    }
+
+    #{{ section.id }} .c-h-nav-lvl3-link > div {
+      display: block !important;
+      width: 0.5em;
+      height: 0.5em;
+      justify-content: center;
+      align-items: center;
+    }
+  /*#endregion*/
+
+  /* right */
+  /*#region*/
+    #{{ section.id }} .c-h-right {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5em;
+    }
+
+    #{{ section.id }} .c-h-right svg {
+      width: 1.3em;
+      height: 1.3em;
+    }
+
+    #{{ section.id }} .header__icon--cart {
+      position: relative;
+      margin-right: 0em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #{{ section.id }} .cart-count-bubble {
+      bottom: auto;
+      top: -1em;
+      left: auto;
+      right: -1em;
+    }
+
+    #{{ section.id }} #c-h-cart-icon {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: fit-content;
+    }
+
+    #{{ section.id }} .c-h-right summary p,
+    #{{ section.id }} .c-h-right > div,
+    #{{ section.id }} .c-h-right svg,
+    #{{ section.id }} .c-h-right #c-h-cart-icon,
+    #{{ section.id }} .c-h-nav-lvl2-details summary {
+      color: {{ section.settings.text_color }};
+    }
+
+    #{{ section.id }} .c-h-right .c-h-menu-link,
+    #{{ section.id }} .c-h-right #cd-cart-icon {
+      border: 1px solid var(--header-border2);
+      border-radius: 0.5em;
+      padding: 0.5em;
+      transition: 0.1s ease;
+    }
+
+    #{{ section.id }} .c-h-right #cd-cart-icon:hover,
+    #{{ section.id }} .c-h-menu-link.c-account:hover {
+      border-color: var(--header-white);
+    }
+
+    #{{ section.id }} .c-h-menu-link {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  /*#endregion*/
+
+
+  @media (min-width: {{ settings.c_breakpoint1 }}px) {
+    #{{ section.id }} .c-h-nav-lvl2-item {
+      width: 13em;
+    }
+  }
+
+  @media (max-width: {{ settings.c_breakpoint1 }}px) {
+  }
+  
+  @media (max-width: {{ settings.c_breakpoint2 }}px) {
+    #{{ section.id }} .c-h-mobile-nav {
+      display: flex;
+    }
+
+    #{{ section.id }} .c-h-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+    }
+
+    #{{ section.id }} .c-h-left {
+      justify-content: flex-start;
+    }
+
+    #{{ section.id }} .c-h-nav {
+      display: none;
+    }
+
+    #{{ section.id }} .c-h-right {
+      gap: 1em;
+    }
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-h-right > .c-h-menu-link.c-account,
+    #{{ section.id }} .c-h-right > .c-h-currency {
+      display: none;
+    }
+
+    #{{ section.id }} .c-h-lvl2-page,
+    #{{ section.id }} .c-h-lvl3-page {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="c-h-wrapper">
+    <div class="page-width">
+      <div class="c-h-inner">
+        <div class="c-h-mobile-nav">
+          <span class="c-h-mobile-hamburger" data-open-navdrawer>{% render 'c-icon-menu' %}</span>
+          <div id="c-h-drawer-wrapper" open="false">
+            <div id="c-h-drawer">
+              <div class="c-h-drawer-top">
+                <{% if uselogoLink == true %}a href="/"{% else %}div{% endif %} class="c-h-drawer-logo-link">
+                  {{ settings.logo | image_url: width: 250 | image_tag: loading: 'eager', height: 'auto', class: 'c-h-logo' }}
+                </{% if uselogoLink == true %}a{% else %}div{% endif %}>
+                <span id="c-h-close" data-close-navdrawer>{% render 'icon-close' %}</span>
+              </div>
+              <div id="c-h-navigation">
+                <div class="c-h-lvl1-div">
+                  {% for link in headerMenu.links %}
+                    {% assign mobileMenuLvl1 = forloop.first %}
+                    {% if link.links != blank %}
+                      <details class="c-h-lvl2-details" {% if mobileMenuLvl1 %}open{% endif %}>
+                        <summary class="c-h-link-div">
+                          <div class="c-h-link c-h-lvl2">
+                            <span>{{ link.title }}</span>
+                            <div class="c-h-link-right">
+                              <a href="{{ link.url }}" class="c-h-menu-button">See All</a>
+                              <span class="c-h-lvl2-icon">{% render 'c-icon-chevron2' %}</span>
+                            </div>
+                          </div>
+                        </summary>
+                        <div class="c-h-lvl2-page">
+                          {% for childlink in link.links %}
+                            {% assign mobileMenuLvl1-x = forloop.index %}
+                            {% if childlink.links != blank %}
+                              {% for grandchildlink in childlink.links %}
+                                <div class="c-h-link-div">
+                                  <a href="{{ grandchildlink.url }}" class="c-h-link">{{ grandchildlink.title }}</a>
+                                </div>
+                              {% endfor %}
+                            {% else %}
+                              <a href="{{ childlink.url }}" class="c-h-nav-lvl2-item">
+                                {% if childlink.type == 'collection_link' %}
+                                  {% assign c_nav_collection_title = childlink.title | downcase | handleize | strip %}
+                                  {% assign c_nav_collection = collections[c_nav_collection_title] %}
+                                  <div class="c-h-nav-lvl2-image-div">
+                                    {{ c_nav_collection.featured_image | image_url: width: 250 | image_tag: loading: 'lazy', height: 'auto', class: '' }}
+                                  </div>
+                                {% elsif childlink.type == 'product_link' %}
+                                  {% assign c_nav_product_title = childlink.title | downcase | handleize | strip %}
+                                  {% assign c_nav_product = all_products[c_nav_product_title] %}
+                                  <div class="c-h-nav-lvl2-image-div">
+                                    {{ c_nav_product.featured_image | image_url: width: 250 | image_tag: loading: 'lazy', height: 'auto', class: '' }}
+                                  </div>
+                                {% endif %}
+                                <div class="c-h-nav-lvl2-title">{{ childlink.title }}</div>
+                                {% if mobileMenuLvl1 %}
+                                  <div class="c-h-nav-lvl2-benefits">
+                                    {% if mobileMenuLvl1-x == 1 %}
+                                      {% for block in section.blocks %}
+                                        {% case block.type %}
+                                          {% when 'ItemOne' %}
+                                            <div>{% render 'c-icon-check' %}<span>{{ block.settings.item_one_text }}</span></div>
+                                        {% endcase %}
+                                      {% endfor %}
+                                    {% elsif mobileMenuLvl1-x == 2 %}
+                                      {% for block in section.blocks %}
+                                        {% case block.type %}
+                                          {% when 'ItemTwo' %}
+                                            <div>{% render 'c-icon-check' %}<span>{{ block.settings.item_two_text }}</span></div>
+                                        {% endcase %}
+                                      {% endfor %}
+                                    {% elsif mobileMenuLvl1-x == 3 %}
+                                      {% for block in section.blocks %}
+                                        {% case block.type %}
+                                          {% when 'ItemThree' %}
+                                            <div>{% render 'c-icon-check' %}<span>{{ block.settings.item_three_text }}</span></div>
+                                        {% endcase %}
+                                      {% endfor %}
+                                    {% elsif mobileMenuLvl1-x == 4 %}
+                                      {% for block in section.blocks %}
+                                        {% case block.type %}
+                                          {% when 'ItemFour' %}
+                                            <div>{{ block.settings.item_four_text }}</div>
+                                        {% endcase %}
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                {% endif %}
+                              </a>
+                            {% endif %}
+                          {% endfor %}
+                          {% comment %} <div class="c-h-lvl2-link-div">
+                            {% for childlink in link.links %}
+                              {% if childlink.links != blank %}
+                                <details class="c-h-lvl2-details">
+                                  <summary class="c-h-link-div">
+                                    <a class="c-h-link">{{ childlink.title }}</a>
+                                    <span class="c-h-lvl2-icon">{% render 'icon-arrow' %}</span>
+                                  </summary>
+                                  <div class="c-h-lvl3-page">
+                                    <div class="">
+                                      {% for grandchildlink in childlink.links %}
+                                        <div class="c-h-link-div">
+                                          <a href="{{ grandchildlink.url }}" class="c-h-link">{{ grandchildlink.title }}</a>
+                                        </div>
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </details>
+                              {% else %}
+                                <a href="{{ childlink.url }}" class="c-h-link">{{ childlink.title }}</a>
+                              {% endif %}
+                            {% endfor %}
+                          </div> {% endcomment %}
+                        </div>
+                      </details>
+                    {% else %}
+                      <div class="c-h-link-div">
+                        <a href="{{ link.url }}" class="c-h-link">
+                          <span>{{ link.title }}</span>
+                        </a>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="c-h-menu-actions">
+                {% if section.settings.show_account == true %}
+                  <a href="/account" class="c-h-menu-link c-account">{% render 'c-icon-account' %}</a>
+                {% endif %}
+              </div>
+              <div class="c-h-mobile-buttons">
+                <a class="c-h-mobile-button c-button c-b2" href="{{ section.settings.button1_url }}"><span>{{ section.settings.button1_text }}</span></a>
+                <a class="c-h-mobile-button c-button c-b3" href="{{ section.settings.button2_url }}">{{ section.settings.button2_text }}</a>
+              </div>
+            </div>
+            <div id="c-h-drawer-overlay" data-close-navdrawer></div>
+          </div>
+        </div>
+        <div class="c-h-left">
+          <a href="{{ routes.root_url }}" class="c-h-logo-link">
+            {{ settings.logo | image_url: width: 250 | image_tag: loading: 'eager', height: 'auto', class: 'c-h-logo' }}
+          </a>
+        </div>
+        <nav class="c-h-nav">
+          <div class="c-h-nav-lvl1-div">
+            {% for link in headerMenu.links %}
+              {% assign menuLvl1 = forloop.first %}
+              {% if link.links != blank %}
+                <details class="c-h-nav-lvl2-details">
+                  <summary class="c-h-nav-lvl2-summary">
+                    <a href="{{ link.url }}" class="c-h-nav-lvl1-link">{{ link.title }}</a>
+                    <span class="c-h-nav-lvl2-icon">{% render 'c-icon-chevron' %}</span>
+                  </summary>
+                  <div class="c-h-nav-lvl2-div">
+                    <div class="c-h-nav-lvl2-grid">
+                      {% for childlink in link.links %}
+                        {% assign menuLvl1-x = forloop.index %}
+                        {% if childlink.links != blank %}
+                          <div class="c-h-nav-lvl3-wrapper">
+                            {% comment %}
+                              <a href="{{ childlink.url }}" class="c-h-nav-lvl2-title">{{ childlink.title }}</a>
+                            {% endcomment %}
+                            <div class="c-h-nav-lvl3-div">
+                              {% for grandchildlink in childlink.links %}
+                                <a href="{{ grandchildlink.url }}" class="c-h-nav-lvl3-link">
+                                  </div>{{ grandchildlink.title }}
+                                </a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        {% else %}
+                          <a href="{{ childlink.url }}" class="c-h-nav-lvl2-item">
+                            {% if childlink.type == 'collection_link' %}
+                              {% assign c_nav_collection_title = childlink.title | downcase | handleize | strip %}
+                              {% assign c_nav_collection = collections[c_nav_collection_title] %}
+                              <div class="c-h-nav-lvl2-image-div">
+                                {{ c_nav_collection.featured_image | image_url: width: 250 | image_tag: loading: 'lazy', height: 'auto', class: '' }}
+                              </div>
+                            {% elsif childlink.type == 'product_link' %}
+                              {% assign c_nav_product_title = childlink.title | downcase | handleize | strip %}
+                              {% assign c_nav_product = all_products[c_nav_product_title] %}
+                              <div class="c-h-nav-lvl2-image-div">
+                                {{ c_nav_product.featured_image | image_url: width: 250 | image_tag: loading: 'lazy', height: 'auto', class: '' }}
+                              </div>
+                            {% endif %}
+                            <div class="c-h-nav-lvl2-title">{{ childlink.title }}</div>
+                            {% if menuLvl1 %}
+                              <div class="c-h-nav-lvl2-benefits">
+                                {% if menuLvl1-x == 1 %}
+                                  {% for block in section.blocks %}
+                                    {% case block.type %}
+                                      {% when 'ItemOne' %}
+                                        <div>{% render 'c-icon-check' %}<span>{{ block.settings.item_one_text }}</span></div>
+                                    {% endcase %}
+                                  {% endfor %}
+                                {% elsif menuLvl1-x == 2 %}
+                                  {% for block in section.blocks %}
+                                    {% case block.type %}
+                                      {% when 'ItemTwo' %}
+                                        <div>{% render 'c-icon-check' %}<span>{{ block.settings.item_two_text }}</span></div>
+                                    {% endcase %}
+                                  {% endfor %}
+                                {% elsif menuLvl1-x == 3 %}
+                                  {% for block in section.blocks %}
+                                    {% case block.type %}
+                                      {% when 'ItemThree' %}
+                                        <div>{% render 'c-icon-check' %}<span>{{ block.settings.item_three_text }}</span></div>
+                                    {% endcase %}
+                                  {% endfor %}
+                                {% elsif menuLvl1-x == 4 %}
+                                  {% for block in section.blocks %}
+                                    {% case block.type %}
+                                      {% when 'ItemFour' %}
+                                        <div>{{ block.settings.item_four_text }}</div>
+                                    {% endcase %}
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                            {% endif %}
+                          </a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </details>
+              {% else %}
+                <a href="{{ link.url }}" class="c-h-nav-lvl1-link">{{ link.title }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </nav>
+        <div class="c-h-right">
+          {% if useAccountIcon == true %}
+            {% if section.settings.show_account == true %}
+              <a href="/account" class="c-h-menu-link c-account">{% render 'icon-account' %}</a>
+            {% endif %}
+          {% endif %}
+          <a href="{{ routes.cart_url }}" class="header__icon--cart" id="cart-icon-bubble">
+            {% render 'c-icon-cart' %}
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", (event) => {
+    var c_header = document.getElementById("{{ section.id }}");
+    var prevScrollpos = window.pageYOffset;
+
+    window.onscroll = function() {
+      var currentScrollPos = window.pageYOffset;
+      if (window.pageYOffset > 400) {
+        if (prevScrollpos > currentScrollPos) {
+          c_header.style.transform = "translateY(0%)";
+        } else {
+          c_header.style.transform = "translateY(-100%)";
+        }
+      }
+      prevScrollpos = currentScrollPos;
+    }
+  });
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Header",
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["header"]
+    },
+    "class": "c-h-header",
+    "tag": "header",
+    "blocks": [
+      {
+        "name": "ItemOne",
+        "type": "ItemOne",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "item_one_text",
+            "label": "Benefit Text",
+            "default": "Block Heading Here"
+          }
+        ]
+      },
+      {
+        "name": "ItemTwo",
+        "type": "ItemTwo",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "item_two_text",
+            "label": "Benefit Text",
+            "default": "Block Heading Here"
+          }
+        ]
+      },
+      {
+        "name": "ItemThree",
+        "type": "ItemThree",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "item_three_text",
+            "label": "Benefit Text",
+            "default": "Block Heading Here"
+          }
+        ]
+      },
+      {
+        "name": "ItemFour",
+        "type": "ItemFour",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "item_four_text",
+            "label": "Benefit Text",
+            "default": "Block Heading Here"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_account",
+        "label": "Show account",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "button1_text",
+        "label": "Button1 text",
+        "default": "Buy Now"
+      },
+      {
+        "type": "url",
+        "id": "button1_url",
+        "label": "Button1 Link"
+      },
+      {
+        "type": "text",
+        "id": "button2_text",
+        "label": "Button2 text",
+        "default": "Learn More"
+      },
+      {
+        "type": "url",
+        "id": "button2_url",
+        "label": "Button2 Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "mobile_drawer_bg_color",
+        "label": "Mobile drawer background color",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 4,
+        "step": 0.1,
+        "default": 0.5,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 4,
+        "step": 0.1,
+        "default": 0.5,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Header"
+      }
+    ]
+  }
+{% endschema %}

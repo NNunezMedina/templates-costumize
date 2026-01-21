@@ -1,0 +1,318 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} .mySwiper {
+    padding: 1em 3em;
+    cursor: grab;
+  }
+
+  #{{ section.id }} .c-rs-card {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1.5em;
+    border-radius: 0em;
+    /* box-shadow: 0px 5px 10px 2px rgba(0,0,0,0.2); */
+    /* height: auto; */
+    background-color: {{ section.settings.card_bg_color }};
+  }
+
+  #{{ section.id }} .c-rs-card,
+  #{{ section.id }} .c-rs-card > * {
+    color: {{ section.settings.card_text_color }};
+  }
+  
+  #{{ section.id }} .c-rs-card-stars {
+    display: flex;
+    gap: 5px;
+  }
+
+  #{{ section.id }} h2 {
+    color: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .c-rs-card-stars svg {
+    color: {{ section.settings.star_color }};
+  }
+
+  #{{ section.id }} .c-rs-card-paragraph {
+    font-size: 1.125em;
+  }
+
+  #{{ section.id }} .c-rs-card-name {
+    font-size: 1.125em;
+    font-weight: 700;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .mySwiper {
+      padding: 1em 1em;
+    }
+
+    #{{ section.id }} .c-rs-card-paragraph,
+    #{{ section.id }} .c-rs-card-name {
+      font-size: 1em;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+  </div>
+  <div class="{% if section.settings.full_width == false %}page-width{% endif %}">
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'Item' %}
+              <div class="c-rs-card swiper-slide" {{ block.shopify_attributes }}>
+                <div class="c-rs-card-stars">
+                  {% for i in (1..5) %}
+                    {% render 'c-icon-star' %}
+                  {% endfor %}
+                </div>
+                {%- if block.settings.block_heading != empty -%}<h3>{{ block.settings.block_heading }}</h3>{%- endif -%}
+                <div class="c-rs-card-paragraph">{{ block.settings.block_paragraph }}</div>
+                <p class="c-rs-card-name">{{ block.settings.block_text }}</p>
+                <div>
+                  {% if block.settings.block_image %}
+                    {{ block.settings.block_image | image_url: width: 1250 | image_tag: loading: 'lazy', height: 'auto' }}
+                  {% endif %}
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      <div class="c-rs-arrows">
+        <div class="swiper-button-prev swiper-arrow"></div>
+        <div class="swiper-button-next swiper-arrow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  var swiper = new Swiper("#{{ section.id }} .mySwiper", {
+    slidesPerView: 1.5,
+    spaceBetween: 32,
+    breakpoints: {
+      {{ settings.c_breakpoint2 }}: {  
+         slidesPerView: 4
+      },
+      {{ settings.c_breakpoint3 }}: {  
+         slidesPerView: 2.5
+      },
+      {{ settings.c_breakpoint4 }}: {  
+         slidesPerView: 1.5
+      }
+    },
+    navigation: {
+      nextEl: "#{{ section.id }} .swiper-button-next",
+      prevEl: "#{{ section.id }} .swiper-button-prev",
+    },
+  });
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Reviews Slider",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_heading",
+            "label": "Heading",
+            "default": "Lorem ipsum dolor sit amet"
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "text",
+            "id": "block_text",
+            "label": "Name",
+            "default": "Person Name"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Full width?",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "card_bg_color",
+        "label": "Card background color",
+        "default": "#eeeeee"
+      },
+      {
+        "type": "color",
+        "id": "card_text_color",
+        "label": "Card text color",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "star_color",
+        "label": "Star color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Reviews Slider"
+      }
+    ]
+  }
+{% endschema %}

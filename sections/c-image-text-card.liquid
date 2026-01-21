@@ -1,0 +1,222 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-itc-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    background-color: #fbf9f6;
+    gap: 0em;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  #{{ section.id }} .c-itc-wrapper-left {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-itc-wrapper img {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-itc-wrapper-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+    padding: 2.5em;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} > .page-width {
+      padding: 0em;
+    }
+
+    #{{ section.id }} .c-itc-wrapper {
+      flex-direction: column;
+      border-left: none;
+      border-right: none;
+    }
+
+    #{{ section.id }} .c-itc-wrapper-left {
+      order: 1;
+    }
+
+    #{{ section.id }} .c-itc-wrapper-left img {
+      width: 100%;
+    }
+
+    #{{ section.id }} .c-itc-wrapper-right {
+      gap: 1em;
+      padding: 2.5em 2em;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-itc-wrapper">
+      <div class="c-itc-wrapper-left">
+        {% if section.settings.image %}
+          {{ section.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', height: 'auto' }}
+        {% endif %}
+      </div>
+      <div class="c-itc-wrapper-right">
+        <h2>{{ section.settings.clamps_heading }}</h2>
+        <div>{{ section.settings.clamps_text }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Image Text Card",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "clamps_heading",
+        "label": "Clamps heading"
+      },
+      {
+        "type": "text",
+        "id": "clamps_text",
+        "label": "Clamps text"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Image Text Card"
+      }
+    ]
+  }
+{% endschema %}

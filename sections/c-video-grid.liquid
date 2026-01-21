@@ -1,0 +1,311 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-vg-grid {
+    display: grid; 
+    grid-template-columns:{% for i in (1..section.settings.columns) %} 1fr{% endfor %};
+    column-gap: 2rem;
+    row-gap: 2rem;
+    width: {{ section.settings.container_width }}%;
+    {% if section.settings.container_alignment == "center" %}
+      margin-left: auto;
+      margin-right: auto;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-vg-video-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    text-align: center;
+  }
+
+  #{{ section.id }} .c-vg-video {
+    width: 100%;
+    border-radius: 0em;
+  }
+
+  #{{ section.id }} .c-vg-paragraph a {
+    color: {{ section.settings.text_color }};
+    text-decoration: underline;
+    text-underline-offset: 2px;    
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-vg-grid {
+      grid-template-columns:{% for i in (1..section.settings.mobile_columns) %} 1fr{% endfor %};
+    }
+  }
+</style>
+
+
+{% liquid
+  assign vAutoplay = section.settings.autoplay
+  assign vLoop = section.settings.loop
+  assign vMuted = section.settings.muted
+  assign vControls = section.settings.controls
+%}
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-vg-grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'Item' %}
+            <div class="c-vg-video-div" {{ block.shopify_attributes }}>
+              {% assign myPoster = block.settings.video.preview_image | image_url %}
+              {{ block.settings.video | video_tag: autoplay: vAutoplay, loop: vLoop, muted: vMuted, controls: vControls,
+              class: 'c-vg-video', poster: myPoster }}
+              {%- if block.settings.block_paragraph != empty -%}
+                <div class="c-vg-paragraph">{{ block.settings.block_paragraph }}</div>
+              {%- endif -%}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Video Grid",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "video",
+            "id": "video",
+            "label": "Video Upload"
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet.</p>"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "range",
+        "id": "container_width",
+        "label": "Container width",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      },
+      {
+        "type": "select",
+        "id": "container_alignment",
+        "label": "Container Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Video Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "Autoplay",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "loop",
+        "label": "Loop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "muted",
+        "label": "Muted",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "controls",
+        "label": "Controls",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "columns",
+        "label": "Columns",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "mobile_columns",
+        "label": "Mobile Columns",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Video Grid",
+        "blocks": [
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

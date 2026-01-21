@@ -1,0 +1,307 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+    background: url("{{ section.settings.bg_image | image_url }}") no-repeat center;
+    background-size: cover;
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-cb-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    min-height: 50vh;
+    max-width: 756px;
+    text-transform: uppercase;
+  }
+
+  #{{ section.id }} .c-cb-card > * {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-cb-card-top {
+    padding: 2em;
+    {% if section.settings.enable_card_bg %}
+    background: {{ section.settings.bg_card_color }};
+  {% endif %}
+  }
+
+  #{{ section.id }} .c-cb-heading h2 {
+    font-size: 2rem;
+  }
+
+  #{{ section.id }} .c-cb-heading strong {
+    font-size: 3rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  #{{ section.id }} .c-cb-card-bottom {
+    {% if section.settings.enable_card_bg %}
+    background-color: {{ section.settings.bottom_bg_card_color }};
+    {% endif %}
+    padding: 2em;
+    border-radius: 0em 0em 2em 2em;
+  }
+  
+  #{{ section.id }} .c-cb-paragraph {
+    color: #fff;
+    font-size: 2.25rem;
+    line-height: 140%;
+  }
+  
+  #{{ section.id }} .c-buttons-div {
+    margin-top: 1em;
+    justify-content: center;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-cb-card-top {
+      padding: 2em 1em;
+    }
+
+    #{{ section.id }} .c-cb-heading h2 {
+      font-size: 1.75rem;
+    }
+
+    #{{ section.id }} .c-cb-heading strong {
+      font-size: 2.5rem;
+      margin-left: 0rem;
+      margin-right: 0rem;
+    }
+
+    #{{ section.id }} .c-cb-card-bottom {
+      padding: 2em 1em;
+    }
+
+    #{{ section.id }} .c-cb-paragraph {
+      font-size: 1.5rem;
+    }
+
+    #{{ section.id }} .c-buttons-div {
+      align-items: center;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-cb-card">
+      <div class="c-cb-card-top">
+        {%- if section.settings.heading != empty -%}<div class="c-cb-heading">{{ section.settings.heading2 }}</div>{%- endif -%}
+      </div>
+      <div class="c-cb-card-bottom">
+        {%- if section.settings.paragraph != empty -%}<div class="c-cb-paragraph">{{ section.settings.paragraph }}</div>{%- endif -%}
+        <div class="c-buttons-div">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Button' %}
+                <a href="{{ block.settings.button_url }}" class="c-button {{ block.settings.button_style }}" {{ block.shopify_attributes }}>{{ block.settings.button_text }}</a>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Card Banner",
+    "blocks": [
+      {
+        "name": "Button",
+        "type": "Button",
+        "limit": 2,
+        "settings": [
+          {
+            "type": "header",
+            "content": "Button"
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Shop Now"
+          },
+          {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button Link"
+          },
+          {
+            "type": "text",
+            "id": "button_style",
+            "label": "Button style",
+            "default": "c-b1"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Background Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_card_bg",
+        "label": "Enable card background",
+        "default": false
+      },
+      {
+        "type": "richtext",
+        "id": "heading2",
+        "label": "Heading",
+        "default": "<p>Lorem ipsum dolor sit amet.</p>"
+      },
+      {
+        "type": "richtext",
+        "id": "paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>"
+      },
+      {
+        "type": "color",
+        "id": "bg_card_color",
+        "label": "Background card color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "bottom_bg_card_color",
+        "label": "Background card color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Card Banner"
+      }
+    ]
+  }
+{% endschema %}

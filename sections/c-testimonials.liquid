@@ -1,0 +1,591 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div:not(.c-button),
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} .c-t18-wrapper-cloak {
+    max-height: 80vh;
+    overflow: hidden;
+    transition: 0.5s ease;
+    position: relative;
+  }
+
+  #{{ section.id }}.c-t18-more .c-t18-wrapper-cloak {
+    max-height: unset;
+  }
+
+  #{{ section.id }} .c-t18-flter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #{{ section.id }} .c-t18-flter-item-wrap {
+    background: none;
+    padding: 2px;
+    border-radius: 999px;
+    transition: 0.2s ease;
+    display: inline-block;
+    margin: 0em 0.25em 0.25em 0em;
+  }
+
+  #{{ section.id }} .c-t18-flter-item-wrap:hover,
+  #{{ section.id }} .c-t18-flter-item-wrap.active {
+    background: #000;
+  }
+
+  #{{ section.id }} .c-t18-flter-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    gap: 0.25em;
+    background-color: {{ section.settings.card_bg_color }};
+    border-radius: 999px;
+    padding: 0.25em 1em;
+  }
+
+  #{{ section.id }} .c-t18-flter-item img {
+    width: 1.25em;
+    height: 1.25em;
+    object-fit: contain;
+  }
+
+  #{{ section.id }} .c-t18-wrapper {
+    column-count: {{ section.settings.columns }};
+    column-gap: 1.5em;
+    row-gap: 2em;
+  }
+
+  /* card */
+  /*#region*/
+    #{{ section.id }} .c-t18-card {
+      display: inline-block;
+      border-radius: 2em;
+      border: 1px solid rgba(0,0,0,0.2);
+      margin-top: 2em;
+      width: 100%;
+      transition: 0.2s ease;
+      background-color: {{ section.settings.card_bg_color }};
+    }
+
+    #{{ section.id }} .c-t18-card-inner {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #{{ section.id }} .c-t18-card-inner iframe {
+      min-height: 400px;
+      border-radius: 2em 2em 0em 0em;
+    }
+
+    #{{ section.id }} .c-t18-image-div {
+      display: flex;
+      min-width: 40%;
+    }
+      
+    #{{ section.id }} .c-t18-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 2em;
+      object-fit: cover;
+    }
+
+    #{{ section.id }} .c-t18-card-content {
+      padding: 2em;
+    }
+
+    #{{ section.id }} .c-t18-card:hover {
+      background-color: {{ section.settings.star_color }};
+    }
+
+    #{{ section.id }} .c-t18-card:hover .c-t18-stars svg {
+      color: gold;
+    }
+
+    #{{ section.id }} .c-t18-card:hover .c-t18-card-paragraph,
+    #{{ section.id }} .c-t18-card:hover .c-t18-card-bottom-text > * {
+      color: #fff;
+    }
+
+    #{{ section.id }} .c-t18-stars {
+      display: flex;
+      gap: 5px;
+    }
+
+    #{{ section.id }} .c-t18-stars svg {
+      width: 1em;
+      opacity: 0.8;
+      color: {{ section.settings.star_color }};
+      transition: 0.2s ease;
+    }
+
+    #{{ section.id }} .c-t18-card-paragraph {
+      margin: 2em 0em;
+    }
+
+    #{{ section.id }} .c-t18-card-bottom {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1em;
+    }
+      
+    #{{ section.id }} .c-t18-card-bottom-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0em;
+    }
+
+    #{{ section.id }} .c-t18-card-name {
+      font-weight: 600;
+    }
+
+    #{{ section.id }} .c-t18-card-position {
+      opacity: 0.8;
+    }
+  /*#endregion*/
+
+  #{{ section.id }} .c-t18-gradient {
+    display: block !important;
+    height: 20vh;
+    position: absolute;
+    bottom: 0em;
+    left: 0em;
+    width: 100%;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0), {{ section.settings.bg_color }} 100%);
+  }
+
+  #{{ section.id }}.c-t18-more .c-t18-gradient {
+    opacity: 0;
+  }
+
+  #{{ section.id }} .c-t18-btn-wrap {
+    margin-top: -1em;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  #{{ section.id }}.c-t18-more .c-t18-btn-wrap {
+    margin-top: 2em;
+  }
+
+  #{{ section.id }} .c-t18-btn-wrap .c-button {
+    cursor: pointer;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint2 }}px) {
+    #{{ section.id }} .c-t18-wrapper {
+      column-count: 2;
+    }
+
+    #{{ section.id }} .c-t18-wrapper-cloak {
+      max-height: 100vh;
+    }
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-t18-wrapper {
+      column-count: 1;
+    }
+  }
+
+  @media (max-width: {{ settings.c_breakpoint4 }}px) {
+    #{{ section.id }} .c-t18-wrapper-cloak {
+      max-height: 130vh;
+    }
+  }
+</style>
+
+
+{%- assign filterBlocks = section.blocks | where: 'type', 'Filter' -%}
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    {% if section.settings.use_load_more == true %}<div class="c-t18-wrapper-cloak">{% endif %}
+      {%- if filterBlocks != empty -%}
+        <div class="c-t18-flter">
+          <div class="c-t18-flter-item-wrap active">
+            <div class="c-t18-flter-item">
+              <div>View All</div>
+            </div>
+          </div>
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Filter' %}
+                <div class="c-t18-flter-item-wrap" data-filter="{{ block.settings.filter_attribte }}" {{ block.shopify_attributes }}>
+                  <div class="c-t18-flter-item">
+                    {% if block.settings.filter_image %}
+                      {{ block.settings.filter_image | image_url: width: 200 | image_tag: loading: 'lazy', height: 'auto' }}
+                    {% endif %}
+                    <div>{{ block.settings.filter_text }}</div>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {%- endif -%}
+      <div class="c-t18-wrapper">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'Review' %}
+              <div class="c-t18-card"
+                {% if block.settings.category_1 == true %}data-one{% endif %}
+                {% if block.settings.category_2 == true %}data-two{% endif %}
+                {% if block.settings.category_3 == true %}data-three{% endif %} {{ block.shopify_attributes }}
+              >
+                <div class="c-t18-card-inner">
+                  {% if block.settings.block_image %}
+                    <div class="c-t18-image-div">{{ block.settings.block_image | image_url: width: 1000 | image_tag: loading: 'lazy', height: 'auto', class: 'c-t18-image' }}</div>
+                  {% endif %}
+                  {% if block.settings.video %}
+                    {% assign myPoster = block.settings.video.preview_image | image_url %}
+                    {{ block.settings.video | media_tag: autoplay: false, loop: true, muted: true, controls: true, class: 'c-t18-image', poster: myPoster }}
+                  {% endif %}
+                  {% if block.settings.block_video != empty %}
+                    <iframe width="100%" height="100%" src="{{ block.settings.block_video }}?rel=0&amp;controls=0&amp;modestbranding=1" title="{{ block.settings.block_video_title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  {% endif %}
+                  <div class="c-t18-card-content">
+                    <div class="c-t18-stars">
+                      {% for i in (1..5) %}
+                        {% render 'c-icon-star' %}
+                      {% endfor %}
+                    </div>
+                    <div class="c-t18-card-paragraph">{{ block.settings.block_paragraph }}</div>
+                    <div class="c-t18-card-bottom">
+                      <div class="c-t18-card-bottom-text">
+                        <p class="c-t18-card-name">{{ block.settings.block_text1 }}</p>
+                        <p class="c-t18-card-position">{{ block.settings.block_text2 }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      {% if section.settings.use_load_more == true %}<div class="c-t18-gradient"></div>{% endif %}
+    {% if section.settings.use_load_more == true %}</div>
+    <div class="c-t18-btn-wrap">
+      <div class="c-button c-b2">
+        <span>{{ section.settings.button_text }}</span>
+        {% if section.settings.button_arrow == true %}{% render 'icon-arrow' %}{% endif %}
+      </div>
+    </div>{% endif %}
+  </div>
+</section>
+
+
+<script>
+  {% if section.settings.use_load_more == true %}
+    document.querySelector("#{{ section.id }} .c-button").addEventListener("click", () => {
+      if (document.querySelector("#{{ section.id }}").classList.contains("c-t18-more")) {
+        document.querySelector("#{{ section.id }}").classList.remove("c-t18-more");
+        document.querySelector("#{{ section.id }} .c-button span").innerHTML = "{{ section.settings.button_text }}";
+      } else {
+        document.querySelector("#{{ section.id }}").classList.add("c-t18-more");
+        document.querySelector("#{{ section.id }} .c-button span").innerHTML = "Show Less";
+      }
+    });
+  {% endif %}
+
+  {%- if filterBlocks != empty -%}
+    document.querySelectorAll("#{{ section.id }} .c-t18-flter .c-t18-flter-item-wrap").forEach(filter => {
+      filter.addEventListener("click", () => {
+        document.querySelectorAll("#{{ section.id }} .c-t18-flter .c-t18-flter-item-wrap").forEach(filter2 => {
+          filter2.classList.remove("active");
+        });
+        filter.classList.add("active");
+        if (filter.hasAttribute("data-filter") === true) {
+          let myAttribute = "data-" + filter.getAttribute("data-filter");
+          document.querySelectorAll("#{{ section.id }} .c-t18-wrapper .c-t18-card").forEach(review => {
+            review.style.display = "none";
+            if (review.hasAttribute(myAttribute)) {
+              review.style.display = "inline-block";
+            }
+          });
+        } else {
+          document.querySelectorAll("#{{ section.id }} .c-t18-wrapper .c-t18-card").forEach(review => {
+            review.style.display = "inline-block";
+          });
+        }
+        
+      });
+    });
+  {%- endif -%}
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Testimonials",
+    "blocks": [
+      {
+        "name": "Review",
+        "type": "Review",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Review Paragraph",
+            "default": "<p>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.'</p>"
+          },
+          {
+            "type": "text",
+            "id": "block_text1",
+            "label": "Review name",
+            "default": "Name Surname"
+          },
+          {
+            "type": "text",
+            "id": "block_text2",
+            "label": "Review person title"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Review Image"
+          },
+          {
+            "type": "video",
+            "id": "video",
+            "label": "Video Upload"
+          },
+          {
+            "type": "text",
+            "id": "block_video",
+            "label": "Video Embed Link"
+          },
+          {
+            "type": "text",
+            "id": "block_video_title",
+            "label": "Video Embed Title"
+          },
+          {
+            "type": "checkbox",
+            "id": "category_1",
+            "label": "Category - One",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "category_2",
+            "label": "Category - Two",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "category_3",
+            "label": "Category - Three",
+            "default": false
+          }
+        ]
+      },
+      {
+        "name": "Filter",
+        "type": "Filter",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "filter_image",
+            "label": "Filter image"
+          },
+          {
+            "type": "text",
+            "id": "filter_text",
+            "label": "Filter text",
+            "default": "One"
+          },
+          {
+            "type": "text",
+            "id": "filter_attribte",
+            "label": "Filter attribte",
+            "default": "one"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "use_load_more",
+        "label": "Use Load More",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Text",
+        "default": "Load More Testimonials"
+      },
+      {
+        "type": "checkbox",
+        "id": "button_arrow",
+        "label": "Show button arrow",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "button_style",
+        "label": "Button Style",
+        "default": "c-b1"
+      },
+      {
+        "type": "range",
+        "id": "columns",
+        "label": "Columns",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "color",
+        "id": "card_bg_color",
+        "label": "Card background color",
+        "default": "#f3f3f3"
+      },
+      {
+        "type": "color",
+        "id": "star_color",
+        "label": "Star color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "My heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Testimonials"
+      }
+    ]
+  }
+{% endschema %}

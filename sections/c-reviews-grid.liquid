@@ -1,0 +1,299 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} .f-rg-wrapper {
+    display: grid;
+    grid-template-columns:{% for i in (1..section.settings.columns) %} 1fr{% endfor %};
+    column-gap: 1.5em;
+    row-gap: 2em;
+  }
+
+  #{{ section.id }} .f-rg-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1.5em;
+    border: 1px solid #000;
+    margin-bottom: auto;
+    border-radius: .5em;
+  }
+
+  #{{ section.id }} .f-rg-stars {
+    display: flex;
+    gap: 5px;
+  }
+
+  #{{ section.id }} .f-rg-stars svg {
+    width: 1em;
+  }
+
+  #{{ section.id }} .f-rg-card-bottom {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+  }
+
+  #{{ section.id }} .f-rg-image-div {
+    display: flex;
+  }
+    
+  #{{ section.id }} .f-rg-card-bottom img {
+    width: 3em;
+    border-radius: 100px;
+  }
+    
+  #{{ section.id }} .f-rg-card-bottom-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #{{ section.id }} .f-rg-card-name {
+    font-weight: bold;
+  }
+  
+  #{{ section.id }} .f-rg-card-position {
+    font-size: 0.875em;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .f-rg-wrapper {
+      grid-template-columns:{% for i in (1..section.settings.grid_columns_mobile) %} 1fr{% endfor %};
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="f-rg-wrapper">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'Item' %}
+            <div class="f-rg-card" {{ block.shopify_attributes }}>
+              <div class="f-rg-stars">
+                {% for i in (1..block.settings.review_stars) %}
+                  {% render 'c-icon-star' %}
+                {% endfor %}
+              </div>
+              <div>{{ block.settings.block_paragraph }}</div>
+              <div class="f-rg-card-bottom">
+                {% if block.settings.block_image %}
+                  <div class="f-rg-image-div">{{ block.settings.block_image | image_url: width: 50 | image_tag }}</div>
+                {% endif %}
+                <div class="f-rg-card-bottom-text">
+                  <p class="f-rg-card-name">{{ block.settings.block_text1 }}</p>
+                  <p class="f-rg-card-position">{{ block.settings.block_text2 }}</p>
+                </div>
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Reviews Grid",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "range",
+            "id": "review_stars",
+            "label": "Review stars",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "default": 5
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Review Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Review Image"
+          },
+          {
+            "type": "text",
+            "id": "block_text1",
+            "label": "Review name",
+            "default": "Name Surname"
+          },
+          {
+            "type": "text",
+            "id": "block_text2",
+            "label": "Review person title",
+            "default": "Position, Company name"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "range",
+        "id": "columns",
+        "label": "Columns",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "grid_columns_mobile",
+        "label": "Mobile Columns",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 1
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Reviews Grid",
+        "blocks": [
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

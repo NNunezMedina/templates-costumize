@@ -1,0 +1,234 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} .c-ps-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  #{{ section.id }} .c-ps-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-ps-grid {
+    column-count: 2;
+    font-size: 14px;
+    gap: 2.5em;
+  }
+
+  #{{ section.id }} .c-ps-grid-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75em 0em;
+    border-bottom: 1px solid {{ section.settings.accent_color }};
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-ps-grid-item *:last-child {
+    text-align: right;
+  }
+
+  #{{ section.id }} .c-ps-row-heading {
+    font-weight: 600;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-ps-top {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5em;
+    }
+    
+    #{{ section.id }} .c-ps-top .c-button {
+      width: 100%;
+    }
+
+    #{{ section.id }} .c-ps-grid {
+      column-count: 1;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-ps-wrapper">
+      <div class="c-ps-top">
+        <a href="{{ section.settings.pdf_link1 }}" class="c-button c-b4" target="_blank">{% render 'c-icon-download' %}Download Owners Manual</a>
+        <a href="{{ section.settings.pdf_link2 }}" class="c-button c-b4" target="_blank">{% render 'c-icon-download' %}Download Quick Start Guide</a>
+      </div>
+      <div class="c-ps-grid">
+        {% for item in product.metafields.custom.dimensions_specs.value %}
+          {% assign mySplit = item | split: ':' %}
+          <div class="c-ps-grid-item">
+            {% for side in mySplit %}
+              <span class="{% if forloop.index == 2 %}c-ps-row-heading{% endif %}">{{ side }}</span>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Product Specs V2",
+    "enabled_on": {
+      "templates": ["product"]
+    },
+    "settings": [
+      {
+        "type": "url",
+        "id": "pdf_link1",
+        "label": "PDF link 1"
+      },
+      {
+        "type": "url",
+        "id": "pdf_link2",
+        "label": "PDF link 2"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Product Specs V2"
+      }
+    ]
+  }
+{% endschema %}

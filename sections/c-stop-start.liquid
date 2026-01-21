@@ -1,0 +1,471 @@
+{% assign myColor = 'rgba('
+| append: section.settings.accent_color.red
+| append: ', ' | append: section.settings.accent_color.green
+| append: ', ' | append: section.settings.accent_color.blue
+| append: ', 0.1)' %}
+
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} .c-ss-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  #{{ section.id }} .c-ss-images {
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    display: grid;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-ss-images-left {
+    filter: grayscale(1);
+    display: flex;
+  }
+
+  #{{ section.id }} .c-ss-images img {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+    max-height: 40vh;
+  }
+
+  #{{ section.id }} .c-ss-middle {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    display: grid;
+  }
+
+  #{{ section.id }} .c-ss-heading-icon {
+    width: 2em;
+  }
+
+  #{{ section.id }} .c-ss-middle > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-ss-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-ss-item {
+    grid-template-columns: 1fr 1fr;
+    gap: 0px;
+    display: grid;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-ss-item > * {
+    display: flex;
+    padding: 1.3125em 1.875em;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1.25em;
+    line-height: 130%;
+  }
+
+  #{{ section.id }} .c-ss-item-left {
+    background: {{ section.settings.middle_bg_color }};
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  #{{ section.id }} .c-ss-item-right {
+    color: #fff;
+    justify-content: flex-start;
+    background: {{ section.settings.accent_color }};
+  }
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    /* #{{ section.id }} .c-ss-images {
+      grid-template-columns: 1fr;
+    } */
+
+    #{{ section.id }} .c-ss-middle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: {{ myColor }};
+      width: auto;
+      padding: 1em;
+      /* grid-template-columns: 1fr; */
+      gap: 1.5em;
+      /* position: sticky;
+      top: 2em;
+      z-index: 1; */
+    }
+
+    #{{ section.id }} .c-ss-middle > * {
+      gap: 0.5em;
+    }
+
+    #{{ section.id }} .c-ss-heading-icon {
+      width: 1.5em;
+    }
+
+    #{{ section.id }} .c-ss-middle .c-ss-side h2 {
+      font-size: 1.5em;
+    }
+
+    #{{ section.id }} .c-ss-middle .c-ss-side.c-active {
+      background-color: {{ section.settings.accent_color }};
+      padding: 1em;
+    }
+
+    #{{ section.id }} .c-ss-middle .c-ss-side.c-active > * {
+      color: #fff;
+    }
+
+    #{{ section.id }} .c-ss-item {
+      grid-template-columns: 1fr;
+    }
+
+    #{{ section.id }} .c-ss-item > * {
+      padding: 1.25em 1em;
+      font-size: 1.125em;
+    }
+
+    #{{ section.id }} .c-ss-item > *:not(.c-active) {
+      display: none;
+    }
+
+    #{{ section.id }} .c-ss-item-left,
+    #{{ section.id }} .c-ss-item-right {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+
+
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-ss-wrapper">
+      <div class="c-ss-images">
+        <div class="c-ss-images-left">
+          {% if section.settings.stop_image1 %}
+            {{ section.settings.stop_image1 | image_url: width: 1000 | image_tag: loading: 'lazy', height: 'auto' }}
+          {% endif %}
+        </div>
+        <div class="c-ss-images-right">
+          {% if section.settings.start_image1 %}
+            {{ section.settings.start_image1 | image_url: width: 1000 | image_tag: loading: 'lazy', height: 'auto' }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="c-ss-middle">
+        <div class="c-ss-side c-active" data-side="c-ss-item-left">
+          {% if section.settings.stop_heading_icon %}
+            {{ section.settings.stop_heading_icon | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto', class: 'c-ss-heading-icon' }}
+          {% endif %}
+          <h2>{{ section.settings.stop_heading }}</h2>
+        </div>
+        <div class="c-ss-side" data-side="c-ss-item-right">
+          {% if section.settings.start_heading_icon %}
+            {{ section.settings.start_heading_icon | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto', class: 'c-ss-heading-icon' }}
+          {% endif %}
+          <h2>{{ section.settings.start_heading }}</h2>
+        </div>
+      </div>
+      <div class="c-ss-items">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'Item' %}
+              <div class="c-ss-item" {{ block.shopify_attributes }}>
+                <div class="c-ss-item-left c-active">{{ block.settings.stop_paragraph }}</div>
+                <div class="c-ss-item-right">{{ block.settings.start_paragraph }}</div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      {% if section.settings.button_text != empty %}
+        <div>
+          <a class="c-button c-b1" href="{{ section.settings.button_url }}">{{ section.settings.button_text }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+<script>
+  document.querySelectorAll("#{{ section.id }} .c-ss-middle .c-ss-side").forEach(faq => {
+    faq.addEventListener("click", () => {
+      document.querySelectorAll("#{{ section.id }} .c-ss-middle .c-ss-side").forEach(faq2 => {
+        faq2.classList.remove("c-active");
+      });
+
+      if (faq.classList.contains("c-active")) {
+        faq.classList.remove("c-active");
+      } else {
+        faq.classList.add("c-active");
+      }
+
+      document.querySelectorAll("#{{ section.id }} .c-ss-items .c-ss-item > *").forEach(side => {
+        side.classList.remove("c-active");
+      });
+
+      document.querySelectorAll("#{{ section.id }} .c-ss-items .c-ss-item ." + faq.getAttribute("data-side")).forEach(side2 => {
+        side2.classList.add("c-active");
+      });
+    });
+  });
+
+
+  let myTl{{ section.id | replace: '-', '_' }} = gsap.timeline({scrollTrigger: {
+    trigger: "#{{ section.id }} .c-ss-items",
+    pin: false,
+    markers: false,
+    toggleActions: "play none none none",
+    start: "-10% 90%",
+    end: "100% 70%"
+  } })
+  .fromTo("#{{ section.id }} .c-ss-items .c-ss-item", {y: "100%", opacity: 0}, {y: "0%", opacity: 1, stagger: 0.15})
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Stop Start",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "stop_paragraph",
+            "label": "Stop text",
+            "default": "<p>Lorem ipsum dolor sit amet consectetur. Tincidunt integer consequat iaculis magna.</p>"
+          },
+          {
+            "type": "richtext",
+            "id": "start_paragraph",
+            "label": "Start text",
+            "default": "<p>Lorem ipsum dolor sit amet consectetur. Tincidunt integer consequat iaculis magna.</p>"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "text",
+        "id": "stop_heading",
+        "label": "Stop Heading",
+        "default": "Stop"
+      },
+      {
+        "type": "image_picker",
+        "id": "stop_heading_icon",
+        "label": "Stop heading icon"
+      },
+      {
+        "type": "image_picker",
+        "id": "stop_image1",
+        "label": "Stop Image 1"
+      },
+      {
+        "type": "text",
+        "id": "start_heading",
+        "label": "Start Heading",
+        "default": "Start"
+      },
+      {
+        "type": "image_picker",
+        "id": "start_heading_icon",
+        "label": "Start heading icon"
+      },
+      {
+        "type": "image_picker",
+        "id": "start_image1",
+        "label": "Start Image 1"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text",
+        "default": "Shop Now"
+      },
+      {
+        "type": "url",
+        "id": "button_url",
+        "label": "Button Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "middle_bg_color",
+        "label": "Middle color",
+        "default": "#F1F1F1"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Stop Start",
+        "blocks": [
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

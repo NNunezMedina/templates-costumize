@@ -1,0 +1,328 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.section_top_text_alignment }};
+  }
+
+  #{{ section.id }} h2 {
+    color: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .c-cg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-cg-grid-left .c-cg-item {
+    height: 100%;
+  }
+
+  #{{ section.id }} .c-cg-grid-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-cg-item {
+    background-color: {{ section.settings.card_bg_color }};
+  }
+
+  #{{ section.id }} .c-cg-item,
+  #{{ section.id }} .c-cg-item > * {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75em;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-cg-item-content {
+    padding: 1.5em;
+  }
+
+  #{{ section.id }} .c-cg-item-image {
+    margin-top: auto;
+  }
+
+  @media (max-width: {{ settings.c_breakpoint2 }}px) {
+    #{{ section.id }} .c-cg-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: {{ settings.c_breakpoint4 }}px) {
+    #{{ section.id }} .c-cg-grid-right {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="page-width">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-cg-grid">
+      <div class="c-cg-grid-left">
+        {% for block in section.blocks limit: 1 %}
+          {% case block.type %}
+            {% when 'Item' %}
+              <div class="c-cg-item" {{ block.shopify_attributes }}>
+                <div class="c-cg-item-content">
+                  {%- if block.settings.block_subheading != empty -%}<p>{{ block.settings.block_subheading }}</p>{%- endif -%}
+                  <h3 class="c-cg-item-heading h2">{{ block.settings.block_heading }}</h3>
+                  <div class="c-cg-paragraph">{{ block.settings.block_paragraph }}</div>
+                  {%- if block.settings.button_text != empty -%}
+                    <a class="c-button {{ section.settings.button_style }}" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>
+                  {%- endif -%}
+                </div>
+                {% if block.settings.block_image %}
+                  <div class="c-cg-item-image">
+                    {{ block.settings.block_image | image_url: width: 1250 | image_tag: loading: 'lazy', height: 'auto' }}
+                  </div>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      <div class="c-cg-grid-right">
+        {% for block in section.blocks limit: 4 offset: 1 %}
+          {% case block.type %}
+            {% when 'Item' %}
+              <div class="c-cg-item" {{ block.shopify_attributes }}>
+                <div class="c-cg-item-content">
+                  {%- if block.settings.block_subheading != empty -%}<p>{{ block.settings.block_subheading }}</p>{%- endif -%}
+                  <h3 class="c-cg-item-heading">{{ block.settings.block_heading }}</h3>
+                  <div class="c-cg-paragraph">{{ block.settings.block_paragraph }}</div>
+                  {%- if block.settings.button_text != empty -%}
+                    <a class="c-button {{ section.settings.button_style }}" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>
+                  {%- endif -%}
+                </div>
+                {% if block.settings.block_image %}
+                  <div class="c-cg-item-image">
+                    {{ block.settings.block_image | image_url: width: 1250 | image_tag: loading: 'lazy', height: 'auto' }}
+                  </div>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Cards Grid",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 5,
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_subheading",
+            "label": "Subheading"
+          },
+          {
+            "type": "text",
+            "id": "block_heading",
+            "label": "Heading",
+            "default": "My heading"
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "header",
+            "content": "Button"
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Shop Now"
+          },
+          {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button Link"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "text",
+        "id": "button_style",
+        "label": "Button style",
+        "default": "c-b1"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "card_bg_color",
+        "label": "Card background color",
+        "default": "#eeeeee"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "Section Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_top_text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Cards Grid",
+        "blocks": [
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          },
+          {
+            "type": "Item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

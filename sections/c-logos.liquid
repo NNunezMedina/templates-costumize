@@ -1,0 +1,412 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+    margin-bottom: 1.5em;
+  }
+
+  #{{ section.id }} .c-l-stars-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2em;
+  }
+
+  #{{ section.id }} .c-l-wrapper {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    --gap: {{ section.settings.image_gap }}em;
+    gap: var(--gap);
+    padding-top: {{ section.settings.marquee_padding_top }}em;
+    padding-bottom: {{ section.settings.marquee_padding_bottom }}em;
+    {% if section.settings.direction == "100%" %}justify-content: flex-end;{% endif %}
+  }
+
+  #{{ section.id }} .c-l-marquee-content {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-around;
+    min-width: 100%;
+    gap: var(--gap);
+    animation: {{ section.id }}-scroll {{ section.settings.marquee_speed }}s linear infinite;
+  }
+
+  #{{ section.id }} .c-l-image-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    gap: 0.5em;
+    filter: {% if section.settings.grayscale_logo_colors == true %}grayscale(100%){% endif %} {% if section.settings.invert_logo_colors == true %}invert(100%){% endif %};
+  }
+
+  #{{ section.id }} .c-l-image {
+    width: auto;
+    max-width: 100%;
+    height: {{ section.settings.image_height }}em;
+  }
+
+  #{{ section.id }} .c-l-middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.75em;
+    position: absolute;
+    top: 0em;
+    left: 50%;
+    width: {{ section.settings.container_width }}em;
+    height: 100%;
+    z-index: 1;
+    transform: translateX(-50%);
+    background-color: {{ section.settings.bg_middle_color }};
+  }
+
+  #{{ section.id }} .c-l-middle svg {
+    width: 15px;
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-l-middle p {
+    color: {{ section.settings.text_color }};
+    text-align: center;
+  }
+
+  @keyframes {{ section.id }}-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc({{ section.settings.direction }} - var(--gap))); }
+  }
+
+  {% if section.settings.toggle_pause_on_hover %}
+    #{{ section.id }} .c-l-marquee-content {
+      animation-play-state: running;
+    }
+    #{{ section.id }} .c-l-wrapper:hover .c-l-marquee-content {
+      animation-play-state: paused;
+    }
+  {% endif %}
+
+  @media (max-width: {{ settings.c_breakpoint3 }}px) {
+    #{{ section.id }} .c-l-wrapper {
+      --gap: {{ section.settings.image_gap_mobile }}em;
+    }
+
+    #{{ section.id }} .c-l-middle {
+      gap: 0.4em;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="{% if section.settings.full_width == false %}page-width{% endif %}">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-l-wrapper">
+      {% if section.settings.show_middle == true %}
+        <div class="c-l-middle">
+          <div class="c-l-stars-div">
+            {% for i in (1..5) %}
+              {% render 'c-icon-star' %}
+            {% endfor %}
+          </div>
+          <p class="">{{ section.settings.heading }}</p>
+        </div>
+      {% endif %}
+      {% for i in (1..2) %}
+        <div class="c-l-marquee-content" {% if forloop.index == 2 %}aria-hidden="true"{% endif %}>
+          {% for block in section.blocks %}
+            <div class="c-l-image-div" {{ block.shopify_attributes }}>
+              {% if block.settings.block_image %}
+                {{ block.settings.block_image | image_url: width: 500 | image_tag: loading: 'eager', height: 'auto', class: 'c-l-image' }}
+              {% endif %}
+              <div>{{ block.settings.text }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "C Logos",
+    "blocks": [
+      {
+        "name": "Logo",
+        "type": "Logo",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_middle",
+        "label": "Show middle section",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "AS SEEN ON:"
+      },
+      {
+        "type": "range",
+        "id": "image_height",
+        "label": "Image height",
+        "min": 1,
+        "max": 9,
+        "step": 0.1,
+        "default": 1.9,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "image_gap",
+        "label": "Images gap",
+        "min": 0,
+        "max": 9,
+        "step": 0.1,
+        "default": 6,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "image_gap_mobile",
+        "label": "Images gap mobile",
+        "min": 0,
+        "max": 9,
+        "step": 0.1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "container_width",
+        "label": "Middle container width",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "default": 10,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "marquee_speed",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "sec",
+        "label": "Marquee Speed",
+        "default": 60
+      },
+      {
+        "type": "range",
+        "id": "marquee_padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 2,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "marquee_padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 2,
+        "unit": "rem"
+      },
+      {
+        "type": "select",
+        "id": "direction",
+        "label": "Marquee Direction",
+        "default": "-100%",
+        "options": [
+          {
+            "label": "Left",
+            "value": "-100%"
+          },
+          {
+            "label": "Right",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "toggle_pause_on_hover",
+        "label": "Toggle Pause on Hover",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Full width?",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "grayscale_logo_colors",
+        "label": "Grayscale logos",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "invert_logo_colors",
+        "label": "Invert logo colors",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "bg_middle_color",
+        "label": "Background middle color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "My heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 2,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 2,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Logos"
+      }
+    ]
+  }
+{% endschema %}
