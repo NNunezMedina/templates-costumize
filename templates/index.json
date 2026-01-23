@@ -139,66 +139,11 @@
         "padding_top": 4,
         "padding_bottom": 4
       }
-    },
-    "c_blocks_v2_q6pgAd": {
-      "type": "c-blocks-v2",
-      "blocks": {
-        "item_QBzzjB": {
-          "type": "Item",
-          "settings": {
-            "block_heading": "My heading",
-            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
-          }
-        },
-        "item_qBBt6y": {
-          "type": "Item",
-          "settings": {
-            "block_heading": "My heading",
-            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
-          }
-        },
-        "item_p9VPVz": {
-          "type": "Item",
-          "settings": {
-            "block_heading": "My heading",
-            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "item_QBzzjB",
-        "item_qBBt6y",
-        "item_p9VPVz"
-      ],
-      "name": "C Blocks V2",
-      "settings": {
-        "blocks_direction": "vertical",
-        "blocks_alignment": "left",
-        "icon_width": 3,
-        "section_container": "page-width",
-        "use_separator_boder": false,
-        "columns": 3,
-        "mobile_columns": 2,
-        "button_text": "Buy Now",
-        "button_url": "",
-        "button_style": "c-b1",
-        "accent_color": "#5d3be4",
-        "bg_color": "#fff",
-        "text_color": "#000",
-        "section_top_subheading": "subheading",
-        "section_top_heading": "My heading",
-        "section_top_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
-        "section_top_alignment": "center",
-        "text_alignment": "center",
-        "padding_top": 4,
-        "padding_bottom": 4
-      }
     }
   },
   "order": [
     "image_banner",
     "c_blocks_cVYJJY",
-    "c_card_banner_4qxnyJ",
-    "c_blocks_v2_q6pgAd"
+    "c_card_banner_4qxnyJ"
   ]
 }
