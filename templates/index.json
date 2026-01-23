@@ -142,6 +142,34 @@
     },
     "c_blocks_v2_q6pgAd": {
       "type": "c-blocks-v2",
+      "blocks": {
+        "item_QBzzjB": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          }
+        },
+        "item_qBBt6y": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          }
+        },
+        "item_p9VPVz": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_QBzzjB",
+        "item_qBBt6y",
+        "item_p9VPVz"
+      ],
       "name": "C Blocks V2",
       "settings": {
         "blocks_direction": "vertical",
