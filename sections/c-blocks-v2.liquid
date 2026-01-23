@@ -1,0 +1,423 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    padding-left:{{ section.settings.padding_left }}em;
+    padding-right: {{ section.settings.padding_right }}em;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} h2 {
+    color: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    {% if section.settings.section_top_alignment == "flex-start" %}width: 100%;{% endif %}
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} .c-b-grid {
+    grid-template-columns:{% for i in (1..section.settings.columns) %} 1fr{% endfor %};
+    gap: 1em;
+    display: grid;
+  }
+
+  #{{ section.id }} .c-b-item {
+    display: flex;
+    justify-content: center;
+    {% if section.settings.blocks_direction == "vertical" %}
+      flex-direction: column;
+    {% endif %}
+    {% if section.settings.blocks_alignment == "left" %}
+      align-items: flex-start;
+      text-align: left;
+    {% elsif section.settings.blocks_alignment == "center" %}
+      align-items: center;
+      text-align: center;
+    {% else %}
+      align-items: flex-end;
+      text-align: right;
+    {% endif %}
+  }
+
+
+  {% if section.settings.use_separator_boder == true %}
+    #{{ section.id }} .c-b-item {
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding-right: 1em;
+    }
+
+    #{{ section.id }} .c-b-item:last-child {
+      border-right: none;
+      padding-right: 0em;
+    }
+  {% endif %}
+
+  #{{ section.id }} .c-b-item,
+  #{{ section.id }} .c-b-item-content {
+    gap: 1em;
+  }
+
+  #{{ section.id }} .c-b-item-image-div {
+    display: flex;
+  }
+
+  #{{ section.id }} .c-b-item-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+
+  #{{ section.id }} .c-b-item-image {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-b-item-icon {
+    width: {{ section.settings.icon_width }}em;
+    min-width: {{ section.settings.icon_width }}em;
+  }
+
+  @media (max-width: 768px) {
+    #{{ section.id }} .c-b-grid {
+      grid-template-columns:{% for i in (1..section.settings.mobile_columns) %} 1fr{% endfor %};
+    }
+
+    {% if section.settings.use_separator_boder == true %}
+      #{{ section.id }} .c-b-item {
+        border-right: none;
+        padding-right: 0em;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-bottom: 1em;
+      }
+
+      #{{ section.id }} .c-b-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0em;
+      }
+    {% endif %}
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="{{ section.settings.section_container }}">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-b-grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'Item' %}
+            <div class="c-b-item" {{ block.shopify_attributes }}>
+              <div class="c-b-item-image-div">
+                {% if block.settings.block_image %}
+                  {{ block.settings.block_image | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-image' }}
+                {% endif %}
+                {% if block.settings.block_icon %}
+                  {{ block.settings.block_icon | image_url: width: 500 | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-icon' }}
+                {% endif %}
+              </div>
+              <div class="c-b-item-content">
+                <h3>{{ block.settings.block_heading }}</h3>
+                <div>{{ block.settings.block_paragraph }}</div>
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+    {%- if section.settings.button_text != empty -%}
+      <div class="c-buttons-div">
+        <a class="c-button {{ section.settings.button_style }}" href="{{ section.settings.button_url }}">{{ section.settings.button_text }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+
+<script>
+  /*
+  gsap.timeline({scrollTrigger: {
+    trigger: "#{{ section.id }} .c-b-grid",
+    toggleActions: "restart none reverse none",
+    start: "10% 100%",
+    end: "100% 80%"
+    } })
+    .from("#{{ section.id }} .c-b-item", {y: gsap.utils.wrap(["100%", "-100%"]), duration: 0.8})
+  */
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Blocks V2",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_heading",
+            "label": "Heading",
+            "default": "My heading"
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "block_icon",
+            "label": "Icon"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "select",
+        "id": "blocks_direction",
+        "label": "Blocks direction",
+        "default": "vertical",
+        "options": [
+          {
+            "value": "vertical",
+            "label": "Vertical"
+          },
+          {
+            "value": "horizontal",
+            "label": "Horizontal"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "blocks_alignment",
+        "label": "Blocks alignment",
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "icon_width",
+        "label": "Icon width",
+        "min": 0.4,
+        "max": 10,
+        "step": 0.2,
+        "default": 3,
+        "unit": "rem"
+      },
+      {
+        "type": "select",
+        "id": "section_container",
+        "label": "Section container",
+        "default": "page-width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "Normal"
+          },
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "page-width2",
+            "label": "Smaller"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "use_separator_boder",
+        "label": "Use separator border",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "columns",
+        "label": "Columns",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "mobile_columns",
+        "label": "Mobile Columns",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button text",
+        "default": "Buy Now"
+      },
+      {
+        "type": "url",
+        "id": "button_url",
+        "label": "Button Link"
+      },
+      {
+        "type": "text",
+        "id": "button_style",
+        "label": "Button style",
+        "default": "c-b1"
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "My heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Blocks V2"
+      }
+    ]
+  }
+{% endschema %}
