@@ -49,7 +49,6 @@
     {% endif %}
   }
 
-
   {% if section.settings.use_separator_boder == true %}
     #{{ section.id }} .c-b-item {
       border-right: 1px solid rgba(0, 0, 0, 0.1);
@@ -87,6 +86,37 @@
     min-width: {{ section.settings.icon_width }}em;
   }
 
+  /* NEW: list of icon + text per item */
+  #{{ section.id }} .c-b-item-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    margin-top: 0.6em;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-b-item-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+
+  /* aligns nicely with your blocks_alignment */
+  #{{ section.id }} .c-b-item-feature--left { justify-content: flex-start; }
+  #{{ section.id }} .c-b-item-feature--center { justify-content: center; }
+  #{{ section.id }} .c-b-item-feature--right { justify-content: flex-end; }
+
+  #{{ section.id }} .c-b-item-feature-icon {
+    width: {{ section.settings.feature_icon_width }}em;
+    min-width: {{ section.settings.feature_icon_width }}em;
+    height: auto;
+    display: block;
+  }
+
+  #{{ section.id }} .c-b-item-feature-text {
+    color: {{ section.settings.feature_text_color }};
+  }
+
   @media (max-width: 768px) {
     #{{ section.id }} .c-b-grid {
       grid-template-columns:{% for i in (1..section.settings.mobile_columns) %} 1fr{% endfor %};
@@ -116,6 +146,7 @@
       {%- if section.settings.section_top_heading != empty -%}<h2>{{ section.settings.section_top_heading }}</h2>{%- endif -%}
       {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
     </div>
+
     <div class="c-b-grid">
       {% for block in section.blocks %}
         {% case block.type %}
@@ -129,14 +160,48 @@
                   {{ block.settings.block_icon | image_url: width: 500 | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-icon' }}
                 {% endif %}
               </div>
+
               <div class="c-b-item-content">
                 <h3>{{ block.settings.block_heading }}</h3>
                 <div>{{ block.settings.block_paragraph }}</div>
+
+                {%- assign has_features = false -%}
+                {%- for i in (1..10) -%}
+                  {%- assign icon_key = 'feature_icon_' | append: i -%}
+                  {%- assign text_key = 'feature_text_' | append: i -%}
+                  {%- if block.settings[icon_key] != blank or block.settings[text_key] != blank -%}
+                    {%- assign has_features = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- if has_features -%}
+                  <div class="c-b-item-features">
+                    {%- for i in (1..10) -%}
+                      {%- assign icon_key = 'feature_icon_' | append: i -%}
+                      {%- assign text_key = 'feature_text_' | append: i -%}
+                      {%- assign f_icon = block.settings[icon_key] -%}
+                      {%- assign f_text = block.settings[text_key] -%}
+
+                      {%- if f_icon != blank or f_text != blank -%}
+                        <div class="c-b-item-feature c-b-item-feature--{{ section.settings.blocks_alignment }}">
+                          {%- if f_icon != blank -%}
+                            {{ f_icon | image_url: width: 200 | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-feature-icon' }}
+                          {%- endif -%}
+                          {%- if f_text != blank -%}
+                            <span class="c-b-item-feature-text">{{ f_text }}</span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
               </div>
             </div>
         {% endcase %}
       {% endfor %}
     </div>
+
     {%- if section.settings.button_text != empty -%}
       <div class="c-buttons-div">
         <a class="c-button {{ section.settings.button_style }}" href="{{ section.settings.button_url }}">{{ section.settings.button_text }}</a>
@@ -147,7 +212,6 @@
 
 
 <script>
-  /*
   gsap.timeline({scrollTrigger: {
     trigger: "#{{ section.id }} .c-b-grid",
     toggleActions: "restart none reverse none",
@@ -155,13 +219,12 @@
     end: "100% 80%"
     } })
     .from("#{{ section.id }} .c-b-item", {y: gsap.utils.wrap(["100%", "-100%"]), duration: 0.8})
-  */
 </script>
 
 
 {% schema %}
   {
-    "name": "C Blocks V2",
+    "name": "C Blocks v2",
     "blocks": [
       {
         "name": "Item",
@@ -189,6 +252,121 @@
             "type": "image_picker",
             "id": "block_icon",
             "label": "Icon"
+          },
+
+          {
+            "type": "header",
+            "content": "Icons + Text list (up to 10)"
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_1",
+            "label": "Icon 1"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_1",
+            "label": "Text 1",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_2",
+            "label": "Icon 2"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_2",
+            "label": "Text 2",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_3",
+            "label": "Icon 3"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_3",
+            "label": "Text 3",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_4",
+            "label": "Icon 4"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_4",
+            "label": "Text 4",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_5",
+            "label": "Icon 5"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_5",
+            "label": "Text 5",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_6",
+            "label": "Icon 6"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_6",
+            "label": "Text 6",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_7",
+            "label": "Icon 7"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_7",
+            "label": "Text 7",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_8",
+            "label": "Icon 8"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_8",
+            "label": "Text 8",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_9",
+            "label": "Icon 9"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_9",
+            "label": "Text 9",
+            "default": ""
+          },
+          {
+            "type": "image_picker",
+            "id": "feature_icon_10",
+            "label": "Icon 10"
+          },
+          {
+            "type": "text",
+            "id": "feature_text_10",
+            "label": "Text 10",
+            "default": ""
           }
         ]
       }
@@ -200,14 +378,8 @@
         "label": "Blocks direction",
         "default": "vertical",
         "options": [
-          {
-            "value": "vertical",
-            "label": "Vertical"
-          },
-          {
-            "value": "horizontal",
-            "label": "Horizontal"
-          }
+          { "value": "vertical", "label": "Vertical" },
+          { "value": "horizontal", "label": "Horizontal" }
         ]
       },
       {
@@ -216,18 +388,9 @@
         "label": "Blocks alignment",
         "default": "left",
         "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "right",
-            "label": "Right"
-          }
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "right", "label": "Right" }
         ]
       },
       {
@@ -240,24 +403,37 @@
         "default": 3,
         "unit": "rem"
       },
+
+      {
+        "type": "header",
+        "content": "Icons + Text styles"
+      },
+      {
+        "type": "range",
+        "id": "feature_icon_width",
+        "label": "Feature icon width",
+        "min": 0.4,
+        "max": 6,
+        "step": 0.2,
+        "default": 1.4,
+        "unit": "rem"
+      },
+      {
+        "type": "color",
+        "id": "feature_text_color",
+        "label": "Feature text color",
+        "default": "#000"
+      },
+
       {
         "type": "select",
         "id": "section_container",
         "label": "Section container",
         "default": "page-width",
         "options": [
-          {
-            "value": "page-width",
-            "label": "Normal"
-          },
-          {
-            "value": "",
-            "label": "None"
-          },
-          {
-            "value": "page-width2",
-            "label": "Smaller"
-          }
+          { "value": "page-width", "label": "Normal" },
+          { "value": "", "label": "None" },
+          { "value": "page-width2", "label": "Smaller" }
         ]
       },
       {
@@ -355,18 +531,9 @@
         "label": "Section Top Alignment",
         "default": "center",
         "options": [
-          {
-            "value": "flex-start",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "flex-end",
-            "label": "Right"
-          }
+          { "value": "flex-start", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "flex-end", "label": "Right" }
         ]
       },
       {
@@ -375,18 +542,9 @@
         "label": "Text alignment",
         "default": "center",
         "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "right",
-            "label": "Right"
-          }
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "right", "label": "Right" }
         ]
       },
       {
@@ -416,7 +574,7 @@
     ],
     "presets": [
       {
-        "name": "C Blocks V2"
+        "name": "C Blocks v2"
       }
     ]
   }
