@@ -9,7 +9,7 @@
   }
 
   #{{ section.id }} .c-section-top-subheading,
-  #{{ section.id }} div,
+  #{{ section.id }} div:not(.c-button),
   #{{ section.id }} h2,
   #{{ section.id }} h3 {
     color: {{ section.settings.text_color }};
@@ -145,20 +145,6 @@
   </div>
 </section>
 
-
-<script>
-  /*
-  gsap.timeline({scrollTrigger: {
-    trigger: "#{{ section.id }} .c-b-grid",
-    toggleActions: "restart none reverse none",
-    start: "10% 100%",
-    end: "100% 80%"
-    } })
-    .from("#{{ section.id }} .c-b-item", {y: gsap.utils.wrap(["100%", "-100%"]), duration: 0.8})
-  */
-</script>
-
-
 {% schema %}
   {
     "name": "C Blocks",
@@ -282,7 +268,7 @@
         "min": 1,
         "max": 6,
         "step": 1,
-        "default": 2
+        "default": 1
       },
       {
         "type": "header",
