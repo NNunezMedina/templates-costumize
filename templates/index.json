@@ -141,7 +141,7 @@
       }
     },
     "c_blocks_v2_jGitHg": {
-      "type": "c-blocks-v2",
+      "type": "c-list-blocks",
       "blocks": {
         "item_ExPMyW": {
           "type": "Item",
