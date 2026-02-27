@@ -126,8 +126,7 @@
     "show_cart_note": false,
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
-    "cart_countdown_enabled": true,
-    "cart_countdown_target_date": "2026-02-28T23:59:59",
+    "cart_countdown_enabled": false,
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
