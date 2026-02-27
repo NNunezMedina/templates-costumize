@@ -1451,5 +1451,47 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Cart Countdown Timer",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_countdown_enabled",
+        "label": "Enable countdown timer",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "cart_countdown_message",
+        "label": "Message above countdown",
+        "default": "Offer ends in:"
+      },
+      {
+        "type": "text",
+        "id": "cart_countdown_target_date",
+        "label": "Target date & time",
+        "info": "Format: YYYY-MM-DDTHH:MM:SS  e.g. 2026-03-01T23:59:59",
+        "default": "2026-03-01T23:59:59"
+      },
+      {
+        "type": "color",
+        "id": "cart_countdown_card_bg",
+        "label": "Card background color",
+        "default": "#EDE8DC"
+      },
+      {
+        "type": "color",
+        "id": "cart_countdown_text_color",
+        "label": "Text color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "cart_countdown_wrapper_bg",
+        "label": "Wrapper background color",
+        "default": "#ffffff"
+      }
+    ]
   }
 ]

@@ -1,0 +1,142 @@
+{% comment %}
+  Cart Countdown Timer Snippet
+  Renders a countdown timer inside the cart drawer.
+  Configured via Theme Settings > Cart Countdown Timer.
+
+  Usage:
+  {% render 'c-cart-countdown' %}
+{% endcomment %}
+
+{%- if settings.cart_countdown_enabled and cart != empty -%}
+
+<style>
+  .c-ccd-wrapper {
+    font-size: 16px;
+    padding: 1em 1.25em;
+    background-color: {{ settings.cart_countdown_wrapper_bg }};
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .c-ccd-message {
+    text-align: center;
+    font-size: 0.8125em;
+    font-weight: 600;
+    margin: 0 0 0.75em;
+    color: #333;
+    letter-spacing: 0.01em;
+  }
+
+  .c-ccd-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .c-ccd-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ settings.cart_countdown_card_bg }};
+    color: {{ settings.cart_countdown_text_color }};
+    border-radius: 0.75em;
+    padding: 0.75em 0;
+    min-width: 3.75em;
+    flex: 1;
+    gap: 0.15em;
+  }
+
+  .c-ccd-number {
+    font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .c-ccd-label {
+    font-size: 0.55em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .c-ccd-separator {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: {{ settings.cart_countdown_card_bg }};
+    margin: 0 -0.1em;
+    padding-bottom: 0.4em;
+  }
+
+  .c-ccd-wrapper.c-ccd-expired {
+    display: none;
+  }
+</style>
+
+<div class="c-ccd-wrapper" id="c-ccd-wrapper" data-target="{{ settings.cart_countdown_target_date }}">
+  {%- if settings.cart_countdown_message != empty -%}
+    <p class="c-ccd-message">{{ settings.cart_countdown_message }}</p>
+  {%- endif -%}
+  <div class="c-ccd-grid">
+    <div class="c-ccd-card">
+      <span class="c-ccd-number" id="c-ccd-days">00</span>
+      <span class="c-ccd-label">Days</span>
+    </div>
+    <span class="c-ccd-separator">:</span>
+    <div class="c-ccd-card">
+      <span class="c-ccd-number" id="c-ccd-hours">00</span>
+      <span class="c-ccd-label">Hours</span>
+    </div>
+    <span class="c-ccd-separator">:</span>
+    <div class="c-ccd-card">
+      <span class="c-ccd-number" id="c-ccd-minutes">00</span>
+      <span class="c-ccd-label">Min</span>
+    </div>
+    <span class="c-ccd-separator">:</span>
+    <div class="c-ccd-card">
+      <span class="c-ccd-number" id="c-ccd-seconds">00</span>
+      <span class="c-ccd-label">Sec</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const wrapper = document.getElementById('c-ccd-wrapper');
+  if (!wrapper) return;
+
+  const targetDate = new Date(wrapper.dataset.target).getTime();
+
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function tick() {
+    const now = Date.now();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      wrapper.classList.add('c-ccd-expired');
+      clearInterval(intervalId);
+      return;
+    }
+
+    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('c-ccd-days').textContent    = pad(days);
+    document.getElementById('c-ccd-hours').textContent   = pad(hours);
+    document.getElementById('c-ccd-minutes').textContent = pad(minutes);
+    document.getElementById('c-ccd-seconds').textContent = pad(seconds);
+  }
+
+  tick();
+  const intervalId = setInterval(tick, 1000);
+})();
+</script>
+
+{%- endif -%}
