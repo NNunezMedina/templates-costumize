@@ -140,10 +140,31 @@
         "padding_bottom": 4
       }
     },
-    "c_list_blocks_Ywn994": {
+    "c_blocks_v2_jGitHg": {
       "type": "c-list-blocks",
       "blocks": {
-        "item_GQd6wL": {
+        "item_ExPMyW": {
+          "type": "Item",
+          "settings": {
+            "block_heading": "My heading",
+            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
+            "feature_text_1": "text 1",
+            "feature_text_2": "text 2",
+            "feature_text_3": "text 3",
+            "feature_text_4": "text 4",
+            "feature_text_5": "text 5",
+            "feature_text_6": "text 6",
+            "feature_text_7": "",
+            "feature_text_8": "",
+            "feature_text_9": "",
+            "feature_text_10": "",
+            "item_button_text": "button",
+            "item_button_url": "shopify://products/protein-bar",
+            "item_button_text_color": "#000000",
+            "item_button_border_color": "#000000"
+          }
+        },
+        "item_gmPBFH": {
           "type": "Item",
           "settings": {
             "block_heading": "My heading",
@@ -164,28 +185,7 @@
             "item_button_border_color": "#000000"
           }
         },
-        "item_xdEJ77": {
-          "type": "Item",
-          "settings": {
-            "block_heading": "My heading",
-            "block_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
-            "feature_text_1": "text 1",
-            "feature_text_2": "text 2",
-            "feature_text_3": "text 3",
-            "feature_text_4": "text 4",
-            "feature_text_5": "text 5",
-            "feature_text_6": "text 6",
-            "feature_text_7": "text 7",
-            "feature_text_8": "text 8",
-            "feature_text_9": "text 9",
-            "feature_text_10": "text 10",
-            "item_button_text": "button",
-            "item_button_url": "",
-            "item_button_text_color": "#000000",
-            "item_button_border_color": "#000000"
-          }
-        },
-        "item_XAmiDd": {
+        "item_rNirja": {
           "type": "Item",
           "settings": {
             "block_heading": "My heading",
@@ -208,11 +208,11 @@
         }
       },
       "block_order": [
-        "item_GQd6wL",
-        "item_xdEJ77",
-        "item_XAmiDd"
+        "item_ExPMyW",
+        "item_gmPBFH",
+        "item_rNirja"
       ],
-      "name": "C List Blocks",
+      "name": "C Blocks v2",
       "settings": {
         "blocks_direction": "vertical",
         "blocks_alignment": "left",
@@ -227,8 +227,8 @@
         "button_url": "",
         "button_style": "c-b1",
         "accent_color": "#5d3be4",
-        "bg_color": "#ffffff",
-        "text_color": "#000000",
+        "bg_color": "#fff",
+        "text_color": "#000",
         "section_top_subheading": "subheading",
         "section_top_heading": "My heading",
         "section_top_paragraph": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>",
@@ -237,42 +237,12 @@
         "padding_top": 4,
         "padding_bottom": 4
       }
-    },
-    "featured_collection_YeBhV3": {
-      "type": "featured-collection",
-      "name": "t:sections.featured-collection.presets.name",
-      "settings": {
-        "collection": "pines",
-        "products_to_show": 5,
-        "title": "Featured collection",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": true,
-        "full_width": true,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": true,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
     }
   },
   "order": [
     "image_banner",
     "c_blocks_cVYJJY",
     "c_card_banner_4qxnyJ",
-    "c_list_blocks_Ywn994",
-    "featured_collection_YeBhV3"
+    "c_blocks_v2_jGitHg"
   ]
 }
